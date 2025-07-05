@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Docs | Assignments...</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="/bootclass/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/fontawesome/css/all.css">
+</head>
+
+<body>
+    <!-- NavBar -->
+    <nav class="navbar bg-body-secondary navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand me-auto" href="#">ClassTrack</a>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
+                        ClassTrack
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mx-lg-2" href="uploads.html">Uploads</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mx-lg-2" href="assignments.html">Assignments</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mx-lg-2" href="submissions.html">Submissions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mx-lg-2" href="feedback.html">Feedbacks</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <a href="#" class="login-button me-2">Login</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+    <!-- End of NavBar -->
+    <!-- Hero Section -->
+    <div class="student">
+        <div class="container">
+            <!-- Faculty Dropdown -->
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="faculty" class="form-label fw-semibold">Faculty</label>
+                    <select id="faculty" class="form-select">
+                        <option selected>Select</option>
+                        <option value="1">Faculty of Agriculture</option>
+                        <option value="2">Faculty of BMS</option>
+                        <option value="3">Faculty Of Computing</option>
+                        <option value="4">Faculty of Education</option>
+                        <option value="5">Faculty of Engineering</option>
+                        <option value="6">Faculty of Law</option>
+                        <option value="7">Faculty of Management Science</option>
+                        <option value="8">Faculty of Science</option>
+                        <option value="9">Faculty of Theatre Arts</option>
+                    </select>
+                </div>
+
+                <!-- Department Dropdown -->
+                <div class="col-md-4">
+                    <label for="department" class="form-label fw-semibold mt-md-0 mt-sm-4">Department</label>
+                    <select id="department" class="form-select">
+                        <option selected>Select</option>
+                        <option value="1">Cyber Security</option>
+                        <option value="2">Computer Science</option>
+                        <option value="3">Information Communication Technology</option>
+                        <option value="4">Software Engineering</option>
+                    </select>
+                </div>
+
+                <!-- Course Dropdown -->
+                <div class="col-md-4">
+                    <label for="course" class="form-label fw-semibold mt-md-0 mt-sm-4">Course</label>
+                    <select id="course" class="form-select">
+                        <option selected>Select</option>
+                        <option value="1">SEN301</option>
+                        <option value="2">SEN302</option>
+                        <option value="3">SEN303</option>
+                        <option value="4">SEN304</option>
+                        <option value="5">SEN305</option>
+                        <option value="6">CSC302</option>
+                        <option value="7">CSC305</option>
+                        <option value="8">CED301</option>
+                        <option value="9">CED311</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 col-md-8">
+                    <div class="upload">
+                        <h5>Upload Assignment</h5>
+                        <div class="title">
+                            <h6 class="mt-3">Assignment Title</h6>
+                            <input type="text" name="" id="">
+                        </div>
+                        <div class="upload-box mt-3">
+                            <i class="fas fa-upload"></i>
+                            <span>Click to Upload File</span>
+                            <input type="file" name="fileUpload">
+                        </div>
+                        <button class="mt-2 ps-4 pe-4 text-white">Upload</button>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 col-sm-12">
+                    <div class="recent mt-3 p-2">
+                        <h6>Upload History</h6>
+                        <div class="history">
+                            <label for="" class="fw-semibold">Assignment.pdf</label>
+                            <button type="submit" class="btn btn-success ms-5 ps-4 pe-4 text-white">Submitted</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="mt-4 w-100">Upload Tips <i class="far fa-lightbulb    "></i></h4>
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button fw-bolder" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Check File Format
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>Always upload in the required format (PDF, DOCX, PPT, etc.). Read instructions
+                                        carefully before submitting.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bolder" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false"
+                                    aria-controls="collapseTwo">
+                                    Use Clear File Names
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>Rename files to include your name, matric number, course code, and assignment
+                                        title (e.g., ReubenUweh_CMP2203_Assignment1.pdf).</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bolder" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false"
+                                    aria-controls="collapseThree">
+                                    Proofread Before Uploading
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>Double-check your work for grammar, formatting, and accuracy before submitting—no
+                                        changes after upload!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bolder" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false"
+                                    aria-controls="collapseThree">
+                                    Avoid Blank Pages or Errors
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>Open and review your file after export to ensure nothing is missing or corrupted
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class=" bg-dark text-white py-4 mt-5 text-center">
+            <p class="mb-1">© 2025 ClassTask Portal. All rights reserved.</p>
+            <p class="small">Developed by Reuben Uweh · Student Project · Dept. of Software Engineering</p>
+        </footer>
+    </div>
+    </div>
+    <!-- Close of Hero Section -->
+    <script src="/bootclass/bootstrap/js/bootstrap.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.min.js"
+        integrity="sha384-RuyvpeZCxMJCqVUGFI0Do1mQrods/hhxYlcVfGPOfQtPJh0JCw12tUAZ/Mv10S7D"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+body {
+  background-color: #f4f6fb;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container .navbar-brand {
+  color: rgb(22, 17, 149);
+  font-weight: bold;
+  animation: fadeInDown 0.7s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.dashboard-section {
+  margin-top: 100px;
+}
+
+.section-title {
+  font-weight: bold;
+  font-size: 24px;
+  color: rgb(22, 17, 149);
+  margin-bottom: 20px;
+}
+
+#upload-btn {
+  background-color: rgb(22, 17, 149);
+  color: #fff;
+  border-radius: 5px;
+}
+
+#upload-btn:hover {
+  background-color: rgb(67, 63, 181);
+}
+
+.school-logo {
+  max-height: 60px;
+}
+
+.feedback-card {
+  background-color: #e1e8f5;
+}
+
+.fadeIn {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th,
+td {
+  padding: 12px 15px;
+  border: 1px solid #dee2e6;
+  text-align: left;
+}
+th {
+  background-color: #f8f9fa;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1;
+}

@@ -1,0 +1,506 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    width: 100%;
+    height: 100vh;
+}
+
+nav .navbar-brand {
+    animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+@keyframes tracking-in-expand {
+    0% {
+        letter-spacing: -0.5em;
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+nav .navbar-brand {
+    font-weight: 600;
+    color: rgb(22, 17, 149);
+    font-size: 25px;
+    transition: 0.5s color;
+}
+
+.login-button {
+    background-color: rgb(22, 17, 149);
+    color: #ffffff;
+    padding: 5px 20px;
+    text-decoration: none;
+    border-radius: 100px;
+}
+
+.login-button:hover {
+    background-color: rgb(67, 63, 181);
+    box-shadow: 2px 3px 3px rgb(89, 87, 185);
+    transition: 0.5s background-color;
+}
+
+nav .navbar-toggler {
+    font-size: 1.25rem;
+}
+
+nav .navbar-toggler:focus,
+nav .btn-close:focus {
+    box-shadow: none;
+}
+
+nav .nav-link {
+    color: #000000;
+    position: relative;
+    font-weight: 500;
+}
+
+nav .nav-link:hover {
+    color: #161b4fc6;
+}
+
+@media (min-width: 956px) {
+    nav .nav-link::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 2px;
+        background-color: rgb(22, 17, 149);
+        visibility: hidden;
+        transition: 0.5s ease-in-out;
+    }
+
+    nav .nav-link:hover::before,
+    nav .nav-link.active::before {
+        width: 100%;
+        visibility: visible;
+    }
+}
+
+.student {
+    position: relative;
+    top: 80px;
+}
+
+.name {
+    color: #000000;
+    transform: translateX(-100%);
+    animation: SlideIn 1s ease-out forwards;
+}
+
+@keyframes SlideIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.user-id {
+    position: relative;
+    top: 2px;
+}
+
+.user-id .student-faculty {
+    font-size: 17px;
+}
+
+.user-id .student-dpt {
+    position: relative;
+    top: -15px;
+    font-size: 16px;
+}
+
+.user-id small {
+    position: relative;
+    top: -30px;
+    font-weight: 700;
+}
+
+@media (min-width: 410px) {
+    .user-id {
+        top: 10px;
+    }
+}
+
+@media (max-width: 356px) {
+    .user-id {
+        top: -8px;
+    }
+
+    .profile {
+        width: 135px;
+        height: 135px;
+    }
+
+    .user-id .student-faculty {
+        font-size: 10px;
+    }
+
+    .user-id .student-dpt {
+        font-size: 14px;
+    }
+}
+
+.works {
+    text-decoration: 3px underline rgb(22, 17, 149);
+    animation: tracking-in-expand 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+}
+
+@keyframes tracking-in-expand {
+    0% {
+        letter-spacing: -0.5em;
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.alert {
+    animation: fadeIn 1.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-40px);
+        /* Optional: slight upward motion */
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(-12px);
+    }
+}
+
+.container .card {
+    background-color: #e1e8f5;
+    animation: bounce-top 0.9s both;
+}
+
+.container .card:hover {
+    cursor: pointer;
+    transform: translateY(-25px);
+    box-shadow: 0 5px 12px rgb(185, 184, 208);
+
+}
+
+@keyframes bounce-top {
+    0% {
+        transform: translateY(-45px);
+        animation-timing-function: ease-in;
+        opacity: 1;
+    }
+
+    24% {
+        opacity: 1;
+    }
+
+    40% {
+        transform: translateY(-24px);
+        animation-timing-function: ease-in;
+    }
+
+    65% {
+        transform: translateY(-12px);
+        animation-timing-function: ease-in;
+    }
+
+    82% {
+        transform: translateY(-6px);
+        animation-timing-function: ease-in;
+    }
+
+    93% {
+        transform: translateY(-4px);
+        animation-timing-function: ease-in;
+    }
+
+    25%,
+    55%,
+    75%,
+    87% {
+        transform: translateY(0px);
+        animation-timing-function: ease-out;
+    }
+
+    100% {
+        transform: translateY(0px);
+        animation-timing-function: ease-out;
+        opacity: 1;
+    }
+}
+
+
+.container .card-title {
+    font-size: 50px;
+    color: rgb(44, 40, 174);
+}
+
+.accordion-header .accordion-button:focus {
+    box-shadow: none;
+}
+
+.accordion-body strong {
+    position: relative;
+}
+
+@media (min-width:768px) {
+    .carousel {
+        margin: 50px auto;
+        width: 80%;
+        height: 400px;
+    }
+}
+
+@media (max-width:500px) {
+    .carousel {
+        margin-top: 30px;
+    }
+}
+
+.carousel button {
+    font-size: 100px;
+}
+
+.info {
+    text-decoration: 4px underline rgb(22, 17, 149);
+}
+
+@media (min-width:1024px) {
+    .two {
+        cursor: pointer;
+        transform: scale(1.1);
+        box-shadow: 0 10px 10px #709395;
+    }
+}
+
+@media (min-width:700px) {
+    .two {
+        cursor: pointer;
+        transform: scale(1.1);
+        box-shadow: 0 10px 10px #709395;
+    }
+}
+
+@media (min-width:750px) {
+    .two {
+        cursor: pointer;
+        transform: scale(1.1);
+        box-shadow: 0 10px 10px #709395;
+    }
+}
+
+@media (min-width:1024px) {
+    .info {
+        position: relative;
+        top: 180px;
+    }
+
+    .grade {
+        position: relative;
+        top: 200px;
+    }
+}
+
+@media (min-width:1200px){
+    .footer{
+        position: relative;
+        top: 200px;
+    }
+}
+
+#course,
+#department,
+#faculty:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.upload {
+    border: 1px solid rgba(176, 176, 218, 0.364);
+    background-color: #fefefe;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.upload-box {
+    border: 1px solid rgba(103, 99, 99, 0.238);
+    border-radius: 10px;
+    padding: 100px;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    background-color: #e0e7ee;
+}
+
+@media (max-width:450px) {
+    .upload-box {
+        padding: 40px;
+    }
+}
+
+.upload-box i {
+    font-size: 2rem;
+    color: #6c757d;
+}
+
+.upload-box span {
+    display: block;
+    margin-top: 10px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.upload-box input[type="file"] {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    cursor: pointer;
+}
+
+.title input {
+    width: 100%;
+    padding: 6px;
+    border-radius: 7px;
+    border: none;
+    background-color: #e0e7ee;
+}
+
+.title input:focus {
+    outline: none;
+}
+
+.upload button {
+    background-color: rgb(64, 60, 184);
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.upload button:hover {
+    background-color: rgb(89, 87, 185);
+}
+
+.recent {
+    border: 1px solid rgba(103, 99, 99, 0.238);
+    border-radius: 7px;
+    height: 100px;
+}
+
+.assignment {
+    text-decoration: 4px underline rgb(22, 17, 149);
+    animation: Slide .4s ease-in-out forwards;
+}
+
+@keyframes Slide {
+    from {
+        opacity: 0;
+        transform: translateX(-50%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.new-assignment{
+    animation: SlideRight .4s ease-in-out forwards;
+}
+
+@keyframes SlideRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.cover div {
+    background-color: #e0e7ee;
+    width: 200px;
+    text-align: center;
+    padding: 4px;
+    border: 1px solid rgb(185, 184, 208);
+}
+
+.date {
+    position: relative;
+    left: -53px;
+    top: 10px;
+}
+
+@media (min-width:700px) {
+    .detail {
+        margin-left: auto;
+    }
+}
+
+@media (max-width:430px) {
+    .detail {
+        position: absolute;
+        left: 280px;
+    }
+}
+
+@media (max-width:375px) {
+    .detail {
+        position: absolute;
+        left: 245px;
+    }
+}
+
+@media (max-width:350px) {
+    .detail {
+        position: absolute;
+        left: 216px;
+    }
+}
+
+/* submission Page */
+.submit{
+    text-decoration: 4px underline rgb(22, 17, 149);
+    animation: Slide .4s ease-in-out forwards;
+}
+
+@keyframes Slide {
+    from {
+        opacity: 0;
+        transform: translateX(-50%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
