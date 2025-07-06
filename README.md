@@ -103,7 +103,7 @@ tracks academic tasks, and enhances feedback quality.
    ↓
 [Store to MySQL Database]
    ↓
-[Students bAdds Feedback]
+[Students Adds Feedback]
    ↓
 [Lecturer Views Feedback on Portal]
    ↓
