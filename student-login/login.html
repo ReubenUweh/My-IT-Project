@@ -2,63 +2,148 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="login.css">
-    <link rel="stylesheet" href="/bootclass/bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" href="/fontawesome/css/all.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Login - ClassTrack</title>
+    <link rel="stylesheet" href="login.css" />
+    <link href="/bootclass/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
 </head>
 
 <body>
- <div class="container my-4">
-  <!-- Motivational Quotes Carousel -->
-  <div id="motivationalQuotes" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner text-center bg-light p-4 rounded shadow-sm">
-      <div class="carousel-item active">
-        <blockquote class="blockquote">
-          <p>"Education is the passport to the future, for tomorrow belongs to those who prepare for it today." – Malcolm X</p>
-        </blockquote>
-      </div>
-      <div class="carousel-item">
-        <blockquote class="blockquote">
-          <p>"Success is no accident. It is hard work, perseverance, learning, studying, sacrifice." – Pelé</p>
-        </blockquote>
-      </div>
-      <div class="carousel-item">
-        <blockquote class="blockquote">
-          <p>"Believe you can and you're halfway there." – Theodore Roosevelt</p>
-        </blockquote>
-      </div>
-    </div>
-  </div>
+    <!-- NavBar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand me-auto" href="index.html">ClassTrack</a>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
+                        ClassTrack
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mx-lg-2" href="upload.html">Uploads</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mx-lg-2" href="assignments.html">Assignments</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mx-lg-2" href="submissions.html">Submissions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mx-lg-2" href="feedback.html">Feedbacks</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <a href="register.html" class="register-button me-2">Register</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
 
-  <!-- Infographic Stats Section -->
-  <div class="row text-center mt-5">
-    <div class="col-md-4 mb-4">
-      <div class="p-3 bg-white shadow-sm rounded">
-        <i class="fas fa-chart-line fa-2x text-primary mb-2"></i>
-        <h5>Class Average</h5>
-        <p class="text-muted">Avg: <strong>72%</strong> across all subjects this semester.</p>
-      </div>
-    </div>
-    <div class="col-md-4 mb-4">
-      <div class="p-3 bg-white shadow-sm rounded">
-        <i class="fas fa-user-graduate fa-2x text-success mb-2"></i>
-        <h5>Top Performer</h5>
-        <p class="text-muted">Name: <strong>Jane Doe</strong>, GPA: <strong>4.90</strong></p>
-      </div>
-    </div>
-    <div class="col-md-4 mb-4">
-      <div class="p-3 bg-white shadow-sm rounded">
-        <i class="fas fa-chart-bar fa-2x text-info mb-2"></i>
-        <h5>Performance Trend</h5>
-        <p class="text-muted">Up <strong>5%</strong> compared to last semester!</p>
-      </div>
-    </div>
-  </div>
-</div>
+    <!-- Login Section -->
+    <div class="container-fluid login-container">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <!-- Image Section -->
+                <div class="col-lg-6 mb-4 slide-in-left">
+                    <div class="image-section">
+                        <img src="images/Education-rafiki.svg" alt="Student Login"
+                            class="login-image d-none d-md-block" />
+                        <div class="image-content">
+                            <h2>Welcome Back</h2>
+                            <p>
+                                Sign in to access your student dashboard and continue your
+                                academic journey
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Login Form Section -->
+                <div class="col-lg-6 slide-in-right">
+                    <div class="login-card fade-in">
+                        <div class="card-header">
+                            <h3 class="login-title">Student Login</h3>
+                            <p class="login-subtitle">Access your academic portal</p>
+                        </div>
+
+                        <div class="form-container">
+                            <form method="post" action="#" id="loginForm">
+                                <div class="form-group">
+                                    <label for="matricNumber" class="form-label">
+                                        <i class="fas fa-id-card"></i>Matric Number
+                                    </label>
+                                    <input type="text" class="form-control" id="matricNumber" name="matricNumber"
+                                        placeholder="Enter your matric number" required />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="password" class="form-label">
+                                        <i class="fas fa-lock"></i>Password
+                                    </label>
+                                    <div style="position: relative">
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            placeholder="Enter your password" required />
+                                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                                            <i class="fas fa-eye" id="toggleIcon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe" />
+                                    <label class="form-check-label" for="rememberMe">
+                                        Remember me
+                                    </label>
+                                </div>
+
+                                <button type="submit" class="submit-button">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                                </button>
+
+                                <div class="forgot-password">
+                                    <a href="#"
+                                        onclick="alert('Please contact your administrator to reset your password.')">
+                                        Forgot your password?
+                                    </a>
+                                </div>
+
+                                <div class="register-link">
+                                    <p class="text-muted">
+                                        Don't have an account?
+                                        <a href="register.html">Register here</a>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-4 text-center">
+        <p class="mb-1">© 2025 ClassTrack Portal. All rights reserved.</p>
+        <p class="small">
+            Developed by Reuben Uweh · Student Project · Dept. of Software
+            Engineering
+        </p>
+    </footer>
+
+    <script src="/bootclass/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="login.js"></script>
 </body>
 
 </html>
