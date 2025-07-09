@@ -1,110 +1,78 @@
-# 📘 Assignment Submission & Feedback Portal - ClassTrack
+## A web-based academic system that allows students to submit assignments, track status, and receive lecturer feedback. Built with HTML, CSS, Bootstrap 5, JavaScript, PHP, and MySQL, it enhances academic communication and improves feedback quality.
 
-A web-based academic portal where students can upload assignments, view submission status,
-and receive lecturer feedback. Built using **HTML, CSS, Bootstrap, JavaScript, PHP, and MySQL,
-this system improves communication between students and lecturers,
-tracks academic tasks, and enhances feedback quality.
+## 🌍 Why It Matters
+Solves real academic workflow issues
 
----
+Demonstrates full stack development
 
-## 🌍 Why This Project Matters
+Professional UI with modern animations
 
-- ✅ Solves a real, global academic challenge  
-- ✅ Demonstrates full stack skills with **PHP and MySQL**  
-- ✅ Features a clean, interactive UI with **Bootstrap 5**  
-- ✅ Practical animations and user experience features  
-- ✅ Ideal for IT project defense or portfolio
+Ideal for portfolios and project defense
 
----
+## 🔧 Technologies
+Tool	Role
+HTML/CSS	Page structure and styling
+Bootstrap 5	UI components and responsiveness
+JavaScript	Interactivity and DOM control
+PHP	Server-side logic
+MySQL	Database (users, assignments, feedback)
+Font Awesome	Icons and visual appeal
 
-## 🔧 Technologies Used
+## 🧭 Page Structure
+Header: Site name, nav (Home, Uploads, Submissions, Feedback)
 
-| Tool         | Purpose                              |
-|--------------|--------------------------------------|
-| HTML & CSS   | Markup structure and basic styling   |
-| Bootstrap 5  | Responsive layout and UI components  |
-| JavaScript   | Client-side interactivity and DOM logic |
-| PHP          | Server-side processing and logic     |
-| MySQL        | Database storage (assignments, users, feedback) |
-| Font Awesome | Iconography for better UI experience |
+Hero: Welcome message, CTA with animation
 
----
+Upload: Form (file, course, comment)
 
-## 🧭 UI Structure
+Feedback: Lecturer remarks, file preview, status
 
-### 1. Header
-- Logo and site name (ClassTrack)
-- Navigation bar: Home | Uploads | Submissions | Feedback
+Footer: Contact, social links, credits
 
-### 2. Hero Section
-- Welcome message (with optional typewriter animation)
-- Call to Action: “Submit Your Assignment Now”
+## ✨ UI Features
+Scroll-triggered fade-ins
 
-### 3. Upload Section
-- Upload form includes:
-  - File input
-  - Course dropdown
-  - Comment box
-  - Submit button
-- Uploaded content stored in the database via PHP
+Animated button interactions
 
-### 4. Feedback Section
-- Lecturer feedback shown using PHP and MySQL
-- Cards displaying:
-  - Feedback remarks
-  - File preview (mocked or real)
-  - Submission status (Pending, Approved)
+Clean, mobile-first design
 
-### 5. Footer
-- Contact details  
-- Social icons (Font Awesome)  
-- Developer credit and school information  
+## 🔐 Server-Side Features (Beyond Database)
+User Auth: Session control, hashed passwords, role-based redirection
 
----
+Secure File Upload: Validate file type/size, rename files, prevent script injection
 
-## ✨ Animations and Effects
+Form Validation: Check inputs, return clean errors, sanitize data
 
-- Scroll animations: Cards and sections fade in using CSS or JavaScript
-- Submit animation: Feedback and assignment submission shows alert or modal
-- Hover effects: Buttons grow or shadow on hover
-- Typewriter effect: Text animation in hero section (optional with JavaScript)
+Dynamic Views: Display user-specific uploads and feedback via PHP
 
----
+Feedback System: Lecturer posts messages/status updates
 
-## 🧠 PHP and MySQL Integration
+Search & Filter: Filter by course or submission state (GET params)
 
-### Database Structure (simplified)
+## 🧠 Database Tables
+sql
+Copy
+Edit
+users (matric_no, name, password, role)
+assignments (id, student_id, course, file_path, comment, submitted_at)
+feedback (id, assignment_id, lecturer_name, category, message, rating, created_at)
 
-- `users` (matric_no, name, password, role)
-- `assignments` (id, student_id, course, file_path, comment, submitted_at)
-- `feedback` (id, assignment_id, lecturer_name, category, message, rating, created_at)
-
-### Server Logic
-
-- Submit form sends data to `upload.php`
-- Form data and file are saved in MySQL
-- Lecturer feedback inserted via `feedback.php`
-- `submissions.php` reads data from the database and displays per student
-
----
-
-## 🔁 Logic Flow (High Level)
-
-```plaintext
+## 🔁 Logic Flow
+plaintext
+Copy
+Edit
 [Start]
-   ↓
-[Login / Register]
-   ↓
+ ↓
+[Login/Register]
+ ↓
 [Dashboard / Upload Page]
-   ↓
-[Submit Assignment]
-   ↓
-[PHP Validation and File Upload]
-   ↓
-[Store to MySQL Database]
-   ↓
-[Students Adds Feedback]
-   ↓
-[Lecturer Views Feedback on Portal]
-   ↓
+ ↓
+[Submit Assignment → PHP Validation]
+ ↓
+[Save to Database]
+ ↓
+[Lecturer Posts Feedback]
+ ↓
+[Student Views Feedback]
+ ↓
 [End]
