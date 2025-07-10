@@ -43,7 +43,7 @@ Secure File Upload: Validate file type/size, rename files, prevent script inject
 
 Form Validation: Check inputs, return clean errors, sanitize data
 
-Dynamic Views: Display user-specific uploads and feedback via PHP
+Dynamic Views: Display user-specific uploads and feedback
 
 Feedback System: Lecturer posts messages/status updates
 

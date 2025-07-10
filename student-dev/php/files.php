@@ -1,15 +1,15 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $faculty = $_POST['faculty'];
-    $department = $_POST['department'];
-    $course = $_POST['course'];
-    $assignmentTitle = $_POST['assignmentTitle'];
+    // $faculty = $_POST['faculty'];
+    // $department = $_POST['department'];
+    // $course = $_POST['course'];
+    // $assignmentTitle = $_POST['assignmentTitle'];
     $file = $_FILES['fileUpload'];
 
     // Step 1: Validate inputs
-    if (empty($faculty) || empty($department) || empty($course) || empty($assignmentTitle)) {
-        die("All fields are required.");
-    }
+    // if (empty($faculty) || empty($department) || empty($course) || empty($assignmentTitle)) {
+    //     die("All fields are required.");
+    // }
 
     // Step 2: Check if file is selected
     if ($file['name'] === '') {
