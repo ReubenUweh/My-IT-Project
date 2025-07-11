@@ -76,3 +76,26 @@ Edit
 [Student Views Feedback]
  ↓
 [End]
+
+project-root/
+├── controllers/
+│   ├── AuthController.php       # Main authentication controller
+│   ├── RegisterController.php  # (Optional) Separate register controller
+│   └── LoginController.php     # (Optional) Separate login controller
+├── models/
+│   ├── User.php                # User model
+│   └── Auth.php                # Authentication model
+├── views/
+│   ├── auth/
+│   │   ├── login.php           # Login view
+│   │   └── register.php        # Register view
+│   └── layouts/                # (Optional) Layout templates
+├── config/
+│   ├── database.php            # Database configuration
+│   └── security.php           # Security settings
+├── public/
+│   ├── assets/                 # CSS, JS, images
+│   └── index.php               # Front controller
+└── includes/                   # (Optional) Helper files
+    ├── functions.php           # Utility functions
+    └── validation.php          # Validation helpers

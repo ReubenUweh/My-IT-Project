@@ -58,7 +58,7 @@
                 <!-- Image Section -->
                 <div class="col-lg-6 slide-in-left">
                     <div class="image-section">
-                        <img src="images/Education-rafiki.svg" alt="Student Registration"
+                        <img src="images/classroom-student.jpg" alt="Student Registration"
                             class="registration-image d-none d-md-block" width="400px" />
                         <div class="image-content">
                             <h2>Join ClassTrack</h2>
