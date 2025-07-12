@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Registration - ClassTrack</title>
     <link rel="stylesheet" href="login.css" />
-    <link href="/bootclass/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
 </head>
 
