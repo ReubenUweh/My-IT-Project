@@ -1,7 +1,7 @@
 <?php
 // Admin setup script
 session_start();
-require_once "./config/database.php";
+require_once "../config/database.php";
 
 $db = new DataBase();
 $conn = $db->conn;
@@ -153,7 +153,7 @@ if (!$departments) {
                             </h5>
                         </div>
                         <div class="card-body">
-                            <form id="addFacultyForm" method="post" action="./controller/faculty.php">
+                            <form id="addFacultyForm" method="post" action="/controller/faculty.php">
                                 <div class="mb-3">
                                     <label for="facultyName" class="form-label">Faculty Name</label>
                                     <input type="text" class="form-control" id="facultyName" name="facultyName"
@@ -188,7 +188,7 @@ if (!$departments) {
                             </h5>
                         </div>
                         <div class="card-body">
-                            <form id="addDepartmentForm" method="POST" action="../controller/faculty.php">
+                            <form id="addDepartmentForm" method="POST" action="/controller/departments.php">
                                 <div class="mb-3">
                                     <label for="faculty_id" class="form-label">Select Faculty</label>
                                     <select class="form-select" id="faculty_id" name="facultyId" required>

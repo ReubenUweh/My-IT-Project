@@ -20,16 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($result) {
         $_SESSION['message'] = "Department added successfully";
-        header("Location: ../adminSetup.php");
+        header("Location: /admin/adminSetup.php");
         exit();
     } else {
         $_SESSION['error'] = "Insert failed: " . $conn->error; 
-        header("Location: ../adminSetup.php");
+        header("Location: /admin/adminSetup.php");
         exit();
     }
 
 } else {
     $_SESSION['message'] = "Unable to process data";
-    header("Location: ../adminSetup.php");
+    header("Location: /admin/adminSetup.php");
     exit();
 }

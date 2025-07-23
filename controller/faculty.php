@@ -24,11 +24,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['error'] = "Insert failed: " . $conn->error; 
     }
 
-    header("Location: ../adminSetup.php");
+    header("Location: /admin/adminSetup.php");
     exit();
 } else {
     $_SESSION['error'] = "Invalid request";
-    header("Location: ../adminSetup.php");
+    header("Location: /admin/adminSetup.php");
     exit();
 }
 ?>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/admin/adminSetup.php"></form>
+</body>
+</html> -->
