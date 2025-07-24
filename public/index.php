@@ -1,3 +1,6 @@
+<?php
+require "../config/database.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,7 +53,7 @@
           </ul>
         </div>
       </div>
-      <a href="register.php" class="login-button me-2">Login</a>
+      <a href="/controller/logout.php" class="login-button me-2">Logout</a>
       <button
         class="navbar-toggler border-0"
         type="button"
@@ -77,7 +80,7 @@
         <div class="row align-items-center">
           <div class="col-auto">
             <img
-              src="images/profile.png"
+              src="/assets/images/profile.png"
               alt="Profile"
               class="profile-image"
               width="145"

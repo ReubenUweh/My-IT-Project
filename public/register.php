@@ -1,3 +1,32 @@
+<?php
+session_start();
+require_once "../config/database.php";
+
+//fetching departments and faculties
+$db = new DataBase();
+$conn = $db->conn;
+
+$departments = [];
+$stmtQuery = "SELECT departments.id, departments.departmentName, faculties.facultyName 
+                FROM departments JOIN faculties ON departments.facultyId = faculties.id";
+$result = $conn->query($stmtQuery);
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $departments[] = $row;
+    }
+}
+
+$faculties = [];
+$stmtQuery = "SELECT * FROM faculties ORDER BY facultyName";
+$result = $conn->query($stmtQuery);
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $faculties[] = $row;
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,7 +87,7 @@
                 <!-- Image Section -->
                 <div class="col-lg-6 slide-in-left">
                     <div class="image-section">
-                        <img src="images/classroom-student.jpg" alt="Student Registration"
+                        <img src="/assets/images/Education-rafiki.svg" alt="Student Registration"
                             class="registration-image d-none d-md-block" width="400px" />
                         <div class="image-content">
                             <h2>Join ClassTrack</h2>
@@ -81,7 +110,16 @@
                         </div>
 
                         <div class="form-container">
-                            <form method="post" action="#" id="registrationForm">
+                            <!-- Show success/error messages -->
+                            <?php if (isset($_SESSION['success'])): ?>
+                                <div class="alert alert-success"><?php echo $_SESSION['success'];
+                                                                    unset($_SESSION['success']); ?></div>
+                            <?php endif; ?>
+                            <?php if (isset($_SESSION['error'])): ?>
+                                <div class="alert alert-danger"><?php echo $_SESSION['error'];
+                                                                unset($_SESSION['error']); ?></div>
+                            <?php endif; ?>
+                            <form method="post" action="/controller/registerController.php" id="registrationForm">
                                 <div class="name-row">
                                     <div class="form-group">
                                         <label for="firstName" class="form-label">
@@ -103,7 +141,7 @@
                                     <label for="matricNumber" class="form-label">
                                         <i class="fas fa-id-card"></i>Matric Number
                                     </label>
-                                    <input type="text" class="form-control" id="matricNumber" name="matricNumber"
+                                    <input type="text" class="form-control" id="matricNo" name="matricNo"
                                         placeholder="e.g. CMP/2023/001" required />
                                 </div>
                                 <div class="form-group">
@@ -114,49 +152,26 @@
                                         <option value="" selected disabled>
                                             Choose your faculty
                                         </option>
-                                        <option value="Faculty of Computing">
-                                            Faculty of Computing
-                                        </option>
-                                        <option value="Faculty of Science">
-                                            Faculty of Science
-                                        </option>
-                                        <option value="Faculty of Engineering">
-                                            Faculty of Engineering
-                                        </option>
-                                        <option value="Faculty of Arts">Faculty of Arts</option>
-                                        <option value="Faculty of Social Sciences">
-                                            Faculty of Social Sciences
-                                        </option>
-                                        <option value="Faculty of Business">
-                                            Faculty of Business
-                                        </option>
-                                        <option value="Faculty of Education">
-                                            Faculty of Education
-                                        </option>
+                                        <?php
+                                        foreach ($faculties as $faculty) {
+                                            echo "<option value=\"{$faculty['id']}\">{$faculty['facultyName']}</option>";
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="department" class="form-label">
                                         <i class="fas fa-graduation-cap"></i>Department
                                     </label>
-                                    <select class="form-select" id="department" name="department" required>
+                                    <select class="form-select" id="department" name="departmentId" required>
                                         <option value="" selected disabled>
                                             Choose your department
                                         </option>
-                                        <option value="Computer Science">Computer Science</option>
-                                        <option value="Software Engineering">
-                                            Software Engineering
-                                        </option>
-                                        <option value="Information Technology">
-                                            Information Technology
-                                        </option>
-                                        <option value="Cybersecurity">Cybersecurity</option>
-                                        <option value="Data Science">Data Science</option>
-                                        <option value="Mathematics">Mathematics</option>
-                                        <option value="Statistics">Statistics</option>
-                                        <option value="Physics">Physics</option>
-                                        <option value="Chemistry">Chemistry</option>
-                                        <option value="Biology">Biology</option>
+                                        <?php
+                                        foreach ($departments as $department) {
+                                            echo "<option value=\"{$department['id']}\">{$department['departmentName']}</option>";
+                                        }
+                                        ?>
                                     </select>
                                 </div>
 
@@ -188,8 +203,8 @@
     </footer>
 
     <!-- Scripts -->
-  <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
-  <script src="/assets/js/login.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="/assets/js/login.js"></script>
 </body>
 
 </html>

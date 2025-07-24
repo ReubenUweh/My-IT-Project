@@ -1,3 +1,8 @@
+<?php
+require_once "../config/database.php";
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,7 +63,7 @@
                 <!-- Image Section -->
                 <div class="col-lg-6 mb-4 slide-in-left">
                     <div class="image-section">
-                        <img src="images/Education-rafiki.svg" alt="Student Login"
+                        <img src="/assets/images/Education-rafiki.svg" alt="Student Login"
                             class="login-image d-none d-md-block" />
                         <div class="image-content">
                             <h2>Welcome Back</h2>
@@ -79,22 +84,26 @@
                         </div>
 
                         <div class="form-container">
-                            <form method="post" action="#" id="loginForm">
+                            <?php if (isset($_SESSION['error'])): ?>
+                                <div class="alert alert-danger"><?php echo $_SESSION['error'];
+                                                                unset($_SESSION['error']); ?></div>
+                            <?php endif; ?>
+                            <form method="post" action="/controller/loginController.php" id="loginForm">
                                 <div class="form-group">
-                                    <label for="matricNumber" class="form-label">
-                                        <i class="fas fa-id-card"></i>Matric Number
+                                    <label for="lastName" class="form-label">
+                                        <i class="fas fa-id-card"></i>Last Name
                                     </label>
-                                    <input type="text" class="form-control" id="matricNumber" name="matricNumber"
-                                        placeholder="Enter your matric number" required />
+                                    <input type="text" class="form-control" id="lastName" name="lastName"
+                                        placeholder="Enter your last name" required />
                                 </div>
 
                                 <div class="form-group">
                                     <label for="password" class="form-label">
-                                        <i class="fas fa-lock"></i>Password
+                                        <i class="fas fa-lock"></i>Matric Number
                                     </label>
                                     <div style="position: relative">
                                         <input type="password" class="form-control" id="password" name="password"
-                                            placeholder="Enter your password" required />
+                                            placeholder="Enter your matric Number" required />
                                         <button type="button" class="password-toggle" onclick="togglePassword()">
                                             <i class="fas fa-eye" id="toggleIcon"></i>
                                         </button>
@@ -143,8 +152,8 @@
     </footer>
 
     <!-- Scripts -->
-  <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
-  <script src="/assets/js/login.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="/assets/js/login.js"></script>
 </body>
 
 </html>

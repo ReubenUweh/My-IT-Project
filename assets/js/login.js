@@ -3,8 +3,6 @@
 document
   .getElementById("registrationForm")
   .addEventListener("submit", function (e) {
-    e.preventDefault();
-
     // Getting form data
     const formData = new FormData(this);
     const data = Object.fromEntries(formData);
@@ -13,18 +11,17 @@ document
     if (
       !data.firstName ||
       !data.lastName ||
-      !data.matricNumber ||
-      !data.department ||
-      !data.faculty
+      !data.matricNo ||
+      !data.departmentId
     ) {
       alert("Please fill in all required fields.");
       return;
     }
 
     // Validate matric number format
-    const matricPattern = /^[A-Z]{2,4}\/\d{4}\/\d{3}$/;
-    if (!matricPattern.test(data.matricNumber)) {
-      alert("Please enter a valid matric number format (e.g., CMP/2023/001)");
+    const matricPattern = /^[A-Z]{3}\d{7}$/;
+    if (!matricPattern.test(data.matricNo)) {
+      alert("Please enter a valid matric number format (e.g., CMPP2023001)");
       return;
     }
 
@@ -32,12 +29,6 @@ document
     alert(
       "Registration successful! Welcome to ClassTrack, " + data.firstName + "!"
     );
-
-    // Sending this data to your server
-    // console.log('Registration data:', data);
-
-    // Redirect to login page
-    window.location.href = "login.html";
   });
 
 // Real-time validation feedback
@@ -76,33 +67,27 @@ inputs.forEach((input) => {
 
         // Form validation and submission
         document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+            // e.preventDefault();
             
             // Get form data
             const formData = new FormData(this);
             const data = Object.fromEntries(formData);
             
             // Basic validation
-            if (!data.matricNumber || !data.password) {
+            if (!data.matricNo || !data.password) {
                 alert('Please fill in all required fields.');
                 return;
             }
             
             // Validate matric number format
-            const matricPattern = /^[A-Z]{2,4}\/\d{4}\/\d{3}$/;
-            if (!matricPattern.test(data.matricNumber)) {
-                alert('Please enter a valid matric number format (e.g., CMP/2023/001)');
+            const matricPattern = /^[A-Z]{3}\d{7}$/;
+            if (!matricPattern.test(data.matricNo)) {
+                alert('Please enter a valid matric number format (e.g., CMPP2023001)');
                 return;
             }
             
             // Simulate login success
             alert('Login successful! Welcome to ClassTrack!');
-            
-            // In a real application, you would send this data to your server
-            console.log('Login data:', data);
-            
-            // Redirect to dashboard
-            window.location.href = 'index.html';
         });
 
         // Add real-time validation feedback

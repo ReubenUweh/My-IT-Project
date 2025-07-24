@@ -1,44 +1,62 @@
 <?php
-// class Student
-// {
-//   private $conn;
+require_once "../config/database.php";
 
-//   public function __construct($dbConn)
-//   {
-//     $this->conn = $dbConn;
-//   }
+class Student
+{
+    private $conn;
 
-//   public function register($data)
-//   {
-//     $matricNo = $this->sanitize($data['matricNo']);
-//     $surname = $this->sanitize($data['surname']);
-//     $firstName = $this->sanitize($data['firstName']);
-//     $facultyId = intval($data['facultyId']);
-//     $departmentId = intval($data['departmentId']);
+    public function __construct($db)
+    {
+        $this->conn = $db;
+    }
 
-//     // Check if matricNo already exists
-//     $check = $this->conn->prepare("SELECT id FROM students WHERE matricNo = ?");
-//     $check->bind_param("s", $matricNo);
-//     $check->execute();
-//     $check->store_result();
+    public function register($firstName, $lastName, $matricNo, $departmentId)
+    {
+        $firstName = $this->conn->real_escape_string($firstName);
+        $lastName = $this->conn->real_escape_string($lastName);
+        $matricNo = $this->conn->real_escape_string($matricNo);
+        $departmentId = (int)$departmentId;
 
-//     if ($check->num_rows > 0) {
-//       return ['status' => false, 'message' => 'Matric Number already registered.'];
-//     }
+        // Check if student already exists
+        $stmt = $this->conn->prepare("SELECT id FROM students WHERE matricNo = ?");
+        $stmt->bind_param("s", $matricNo);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            return false; // already exists
+        }
+        $stmt->close();
 
-//     // Insert into DB
-//     $stmt = $this->conn->prepare("INSERT INTO students (matricNo, surname, firstName, facultyId, departmentId) VALUES (?, ?, ?, ?, ?)");
-//     $stmt->bind_param("sssii", $matricNo, $surname, $firstName, $facultyId, $departmentId);
+        // Proceed to insert
+        $query = "INSERT INTO students (firstName, lastName, matricNo, departmentId) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($query);
 
-//     if ($stmt->execute()) {
-//       return ['status' => true, 'message' => 'Student registered successfully!'];
-//     } else {
-//       return ['status' => false, 'message' => 'Registration failed: ' . $this->conn->error];
-//     }
-//   }
+        if (!$stmt) {
+            throw new Exception("Prepare failed: " . $this->conn->error);
+        }
 
-//   private function sanitize($input)
-//   {
-//     return htmlspecialchars(trim($input));
-//   }
-// }
+        $stmt->bind_param("sssi", $firstName, $lastName, $matricNo, $departmentId);
+
+        if (!$stmt->execute()) {
+            throw new Exception("Execute failed: " . $stmt->error);
+        }
+
+        return true;
+    }
+    public function login($lastName, $matricNo)
+    {
+        $lastName = $this->conn->real_escape_string($lastName);
+        $matricNo = $this->conn->real_escape_string($matricNo);
+
+        $stmt = $this->conn->prepare("SELECT id FROM students WHERE lastName = ? AND matricNo = ?");
+        $stmt->bind_param("ss", $lastName, $matricNo);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 1) {
+            return $result->fetch_assoc();
+        }
+
+        return false;
+    }
+}
