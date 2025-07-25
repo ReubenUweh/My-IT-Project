@@ -1,5 +1,16 @@
 <?php
 require "../config/database.php";
+
+// $sql = "SELECT s.firstName, s.lastName, s.matricNo, d.departmentName, f.facultyName
+//         FROM students s
+//         JOIN departments d ON s.departmentId = d.id
+//         JOIN faculties f ON d.facultyId = f.id
+//         WHERE s.id = ?";
+// $stmt = $db->conn->prepare($sql);
+// $stmt->bind_param("i", $_SESSION['userId']);
+// $stmt->execute();
+// $result = $stmt->get_result();
+// $user = $result->fetch_assoc();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -324,19 +335,19 @@ require "../config/database.php";
         <div class="carousel-inner">
           <div class="carousel-item active">
             <img
-              src="images/Uni-space.jpg"
+              src="/assets/images/Uni-space.jpg"
               class="d-block w-100"
               alt="University Campus" />
           </div>
           <div class="carousel-item">
             <img
-              src="images/classroom-student.jpg"
+              src="/assets/images/classroom-student.jpg"
               class="d-block w-100"
               alt="Classroom" />
           </div>
           <div class="carousel-item">
             <img
-              src="images/grad.jpg"
+              src="/assets/images/grad.jpg"
               class="d-block w-100"
               alt="Graduation" />
           </div>

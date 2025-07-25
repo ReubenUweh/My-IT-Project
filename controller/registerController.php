@@ -12,14 +12,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $matricNo = $_POST['matricNo'] ?? '';
     $departmentId = $_POST['departmentId'] ?? '';
 
-    // Validate inputs
+    // Validating inputs
     if (empty($firstName) || empty($lastName) || empty($matricNo) || empty($departmentId)) {
         throw new Exception("All fields are required.");
     }
-    // Create a new Student instance
+    // Creating a new Student instance
     $student = new Student($conn);
     try {
-        // Attempt to register the student
+        // Attempting to register the student
         if ($student->register($firstName, $lastName, $matricNo, $departmentId)) {
             $_SESSION['success'] = "Registration successful!";
         } else {

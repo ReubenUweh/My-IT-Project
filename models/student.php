@@ -17,17 +17,17 @@ class Student
         $matricNo = $this->conn->real_escape_string($matricNo);
         $departmentId = (int)$departmentId;
 
-        // Check if student already exists
+        // Checking if student already exists
         $stmt = $this->conn->prepare("SELECT id FROM students WHERE matricNo = ?");
         $stmt->bind_param("s", $matricNo);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
-            return false; // already exists
+            return false; // if matricNo already exists
         }
         $stmt->close();
 
-        // Proceed to insert
+        // Proceeding to inserting to students table
         $query = "INSERT INTO students (firstName, lastName, matricNo, departmentId) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
 

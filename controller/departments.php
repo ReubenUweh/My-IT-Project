@@ -7,12 +7,12 @@ $conn = $db->conn;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // ✅ Validate and sanitize input
+    // ✅ Validating and sanitize input
     $departmentName = $conn->real_escape_string($_POST['departmentName']);
     $departmentCode = $conn->real_escape_string($_POST['departmentCode']);
     $facultyId = $conn->real_escape_string($_POST['facultyId'] ?? null); 
 
-    // ✅ Insert into the departments table
+    // ✅ Inserting into the departments table
     $stmt = "INSERT INTO departments (departmentName, departmentCode, facultyId)";
     $stmt .= " VALUES ('$departmentName', '$departmentCode', '$facultyId')";
 

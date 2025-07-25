@@ -1,6 +1,8 @@
 <?php
+session_start();
 require_once "../config/database.php";
 require_once "../models/student.php";
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db = new DataBase();
@@ -17,11 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Creating a new Student instance
     $student = new Student($conn);
     try {
-        // Attempt to login the student
+        // Attempting to login the student
         $result = $student->login($lastName, $matricNo);
         if ($result) {
-            session_start();
-            $_SESSION['student_id'] = $result['id'];
+            $_SESSION['studentId'] = $result['id'];
             header("Location: /public/index.php");
             exit();
         } else {
@@ -32,8 +33,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     header("Location: /public/login.php");
     exit();
-    $_SESSION['firstName'] = $student['firstName']; // ✅ This must match the DB column key
-    $_SESSION['lastName'] = $student['lastName'];
-    $_SESSION['matricNo'] = $student['matricNo'];
     header("Location: /public/login.php");
 }

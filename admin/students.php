@@ -1,3 +1,22 @@
+<?php
+require "../config/database.php";
+session_start();
+
+$db = new DataBase();
+$conn = $db->conn;
+
+$stmt = "SELECT s.id, s.firstName, s.lastName, s.matricNo, f.facultyName, d.departmentName
+            FROM students s
+            JOIN departments d ON s.departmentId = d.id
+            JOIN faculties f ON d.facultyId = f.id";
+
+$result = $conn->query($stmt);
+
+$faculties = $conn->query("SELECT * FROM faculties");
+$departments = $conn->query("SELECT * FROM departments");
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -128,36 +147,29 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="row g-3">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label class="form-label">Search Students</label>
                             <input type="text" class="form-control" placeholder="Name or Matric Number"
                                 id="searchStudent">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label class="form-label">Faculty</label>
                             <select class="form-select" id="filterFaculty">
                                 <option value="">All Faculties</option>
-                                <option value="engineering">Engineering</option>
-                                <option value="science">Science</option>
-                                <option value="arts">Arts</option>
+                                <?php while ($f = $faculties->fetch_assoc()): ?>
+                                    <option value="<?= htmlspecialchars($f['facultyName']) ?>"><?= htmlspecialchars($f['facultyName']) ?></option>
+                                <?php endwhile; ?>
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label class="form-label">Department</label>
                             <select class="form-select" id="filterDepartment">
                                 <option value="">All Departments</option>
-                                <option value="computer">Computer Science</option>
-                                <option value="mechanical">Mechanical Engineering</option>
-                                <option value="electrical">Electrical Engineering</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-select" id="filterStatus">
-                                <option value="">All Status</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                                <option value="graduated">Graduated</option>
+                                <?php while ($d = $departments->fetch_assoc()): ?>
+                                    <option value="<?= $d['id'] ?>" data-faculty="<?= $d['facultyId'] ?>">
+                                        <?= htmlspecialchars($d['departmentName']) ?>
+                                    </option>
+                                <?php endwhile; ?>
                             </select>
                         </div>
                     </div>
@@ -186,78 +198,58 @@
                                         <input type="checkbox" class="form-check-input" id="selectAll">
                                     </th>
                                     <th>id</th>
-                                    <th>Name</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
                                     <th>Matric Number</th>
                                     <th>Faculty</th>
                                     <th>Department</th>
-                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><input type="checkbox" class="form-check-input"></td>
-                                    <td>1</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar me-2">
-                                                <i class="fas fa-user-circle fa-2x text-muted"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0">John Doe</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>CS/2023/001</td>
-                                    <td>Engineering</td>
-                                    <td>Computer Science</td>
-                                    <td><span class="badge bg-success">Active</span></td>
-                                    <td>
-                                        <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-outline-primary" title="View">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-warning" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger" title="Delete">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="form-check-input"></td>
-                                    <td>2</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar me-2">
-                                                <i class="fas fa-user-circle fa-2x text-muted"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0">John Doe</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>CS/2023/001</td>
-                                    <td>Engineering</td>
-                                    <td>Computer Science</td>
-                                    <td><span class="badge bg-success">Active</span></td>
-                                    <td>
-                                        <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-outline-primary" title="View">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-warning" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger" title="Delete">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <?php if ($result->num_rows > 0): ?>
+                                    <?php while ($row = $result->fetch_assoc()): ?>
+                                        <tr>
+                                            <td><input type="checkbox" class="form-check-input"></td>
+                                            <td><?= $row['id'] ?></td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar me-2">
+                                                        <i class="fas fa-user-circle fa-2x text-muted"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-0"><?= htmlspecialchars($row['firstName']) ?></h6>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <h6 class="mb-0"><?= htmlspecialchars($row['lastName']) ?></h6>
+                                            </td>
+                                            <td><?= htmlspecialchars($row['matricNo']) ?></td>
+                                            <td><?= htmlspecialchars($row['facultyName']) ?></td>
+                                            <td><?= htmlspecialchars($row['departmentName']) ?></td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-outline-primary" title="View">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-warning" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-danger" title="Delete">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php endwhile; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="7" class="text-center">No students found.</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
+
                         </table>
                     </div>
 
