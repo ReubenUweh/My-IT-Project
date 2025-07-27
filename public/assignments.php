@@ -50,7 +50,7 @@
           </ul>
         </div>
       </div>
-      <a href="#" class="login-button me-2">Login</a>
+      <a href="/controller/logout.php" class="login-button me-2">Logout</a>
       <button
         class="navbar-toggler border-0"
         type="button"

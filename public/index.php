@@ -1,16 +1,27 @@
 <?php
+session_start();
 require "../config/database.php";
 
-// $sql = "SELECT s.firstName, s.lastName, s.matricNo, d.departmentName, f.facultyName
-//         FROM students s
-//         JOIN departments d ON s.departmentId = d.id
-//         JOIN faculties f ON d.facultyId = f.id
-//         WHERE s.id = ?";
-// $stmt = $db->conn->prepare($sql);
-// $stmt->bind_param("i", $_SESSION['userId']);
-// $stmt->execute();
-// $result = $stmt->get_result();
-// $user = $result->fetch_assoc();
+if (!isset($_SESSION['studentId'])) {
+  header("Location: /public/login.php");
+  exit();
+}
+
+//fetch student data
+$db = new DataBase();
+$conn = $db->conn;
+$studentId = $_SESSION['studentId'];
+
+$sql = "SELECT s.firstName, s.lastName, s.matricNo, d.departmentName, f.facultyName
+        FROM students s
+        JOIN departments d ON s.departmentId = d.id
+        JOIN faculties f ON d.facultyId = f.id
+        WHERE s.id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $studentId);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -98,10 +109,11 @@ require "../config/database.php";
               height="145" />
           </div>
           <div class="col name-section">
-            <h2 class="mb-2">Reuben Uweh</h2>
-            <p class="fs-5 fw-bold text-muted mb-1">Faculty of Computing</p>
-            <p class="fw-bold text-muted mb-1">Software Engineering</p>
-            <small class="badge bg-primary">MatNo: CMP2203###</small>
+            <h2 class="mb-2"><?= htmlspecialchars($user['firstName'] . ' ' . $user['lastName']) ?></h2>
+            <p class="fs-5 fw-bold text-muted mb-1"><?= htmlspecialchars($user['facultyName']) ?></p>
+            <p class="fw-bold text-muted mb-1"><?= htmlspecialchars($user['departmentName']) ?></p>
+            <small class="badge bg-primary">MatricNo: <?= htmlspecialchars($user['matricNo']) ?></small>
+
           </div>
         </div>
       </div>
