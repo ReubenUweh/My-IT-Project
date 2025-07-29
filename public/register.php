@@ -6,23 +6,20 @@ require_once "../config/database.php";
 $db = new DataBase();
 $conn = $db->conn;
 
-$departments = [];
-$stmtQuery = "SELECT departments.id, departments.departmentName, faculties.facultyName 
-                FROM departments JOIN faculties ON departments.facultyId = faculties.id";
-$result = $conn->query($stmtQuery);
-if ($result) {
-    while ($row = $result->fetch_assoc()) {
-        $departments[] = $row;
-    }
-}
+// $departments = [];
+// $stmtQuery = "SELECT departments.id, departments.departmentName, faculties.facultyName 
+//                 FROM departments JOIN faculties ON departments.facultyId = faculties.id";
+// $result = $conn->query($stmtQuery);
+// if ($result) {
+//     while ($row = $result->fetch_assoc()) {
+//         $departments[] = $row;
+//     }
+// }
 
 $faculties = [];
-$stmtQuery = "SELECT * FROM faculties ORDER BY facultyName";
-$result = $conn->query($stmtQuery);
-if ($result) {
-    while ($row = $result->fetch_assoc()) {
-        $faculties[] = $row;
-    }
+$res = $conn->query("SELECT id, facultyName FROM faculties");
+while ($row = $res->fetch_assoc()) {
+    $faculties[] = $row;
 }
 
 ?>
@@ -150,7 +147,7 @@ if ($result) {
                                     </label>
                                     <select class="form-select" id="faculty" name="faculty" required>
                                         <option value="" selected disabled>
-                                            Choose your faculty
+                                            Select Faculty
                                         </option>
                                         <?php
                                         foreach ($faculties as $faculty) {
@@ -165,13 +162,8 @@ if ($result) {
                                     </label>
                                     <select class="form-select" id="department" name="departmentId" required>
                                         <option value="" selected disabled>
-                                            Choose your department
+                                            Select Department
                                         </option>
-                                        <?php
-                                        foreach ($departments as $department) {
-                                            echo "<option value=\"{$department['id']}\">{$department['departmentName']}</option>";
-                                        }
-                                        ?>
                                     </select>
                                 </div>
 
@@ -205,6 +197,27 @@ if ($result) {
     <!-- Scripts -->
     <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="/assets/js/login.js"></script>
+    <script>
+        document.getElementById("faculty").addEventListener("change", function() {
+            const facultyId = this.value;
+            const departmentSelect = document.getElementById("department");
+
+            if (!facultyId) return;
+
+            fetch("../assets/api/fetchDepartments.php?facultyId=" + facultyId)
+                .then((response) => response.json())
+                .then((data) => {
+                    departmentSelect.innerHTML =
+                        '<option value="" selected disabled>Select Department</option>';
+                    data.forEach((dept) => {
+                        departmentSelect.innerHTML += `<option value="${dept.id}">${dept.departmentName}</option>`;
+                    });
+                })
+                .catch((err) => {
+                    console.error("Error fetching departments:", err);
+                });
+        });
+    </script>
 </body>
 
 </html>

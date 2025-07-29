@@ -419,15 +419,8 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Level</label>
-                                <select class="form-select" required>
-                                    <option value="">Select Level</option>
-                                    <option value="100">100 Level</option>
-                                    <option value="200">200 Level</option>
-                                    <option value="300">300 Level</option>
-                                    <option value="400">400 Level</option>
-                                    <option value="500">500 Level</option>
-                                </select>
+                                <label class="form-label">Start Date</label>
+                                <input type="datetime-local" class="form-control" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Due Date</label>

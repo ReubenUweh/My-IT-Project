@@ -131,7 +131,7 @@ session_start();
                                 <div class="register-link">
                                     <p class="text-muted">
                                         Don't have an account?
-                                        <a href="register.html">Register here</a>
+                                        <a href="register.php">Register here</a>
                                     </p>
                                 </div>
                             </form>
