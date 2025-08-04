@@ -387,3 +387,41 @@ body {
     box-shadow: none;
   }
 }
+
+/* assignemnt */
+.assignment-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 12px;
+  padding: 20px;
+  transition: 0.3s ease;
+}
+
+.assignment-card:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.priority-badge {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  background: #dc3545;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 0 0 10px 0;
+  font-size: 12px;
+}
+
+.btn-gradient {
+  background: linear-gradient(45deg, #007bff, #00c6ff);
+  color: white;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 20px;
+  transition: 0.3s;
+}
+
+.btn-gradient:hover {
+  background: linear-gradient(45deg, #0056b3, #00aaff);
+}
