@@ -114,6 +114,9 @@ $departments = $conn->query("SELECT * FROM departments");
                 <a class="nav-link" href="adminAssignment.php">
                     <i class="fas fa-book me-2"></i>Assignments
                 </a>
+                <a class="nav-link" href="adminSubmission.php">
+                    <i class="fas fa-file-upload me-2"></i>Submissions
+                </a>
                 <a class="nav-link" href="adminFeedback.php">
                     <i class="fas fa-comments me-2"></i>Feedback
                 </a>

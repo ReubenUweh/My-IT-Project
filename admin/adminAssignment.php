@@ -1,3 +1,35 @@
+<?php
+require "../config/database.php";
+
+$db = new DataBase();
+$conn = $db->conn;
+
+//fetch all faculties from database
+$faculties = [];
+$result = $conn->query("SELECT * FROM faculties ORDER BY facultyName");
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $faculties[] = $row;
+    }
+}
+
+//department
+$departments = $conn->query("SELECT d.*, f.facultyName FROM departments d JOIN faculties f ON d.facultyId = f.id ORDER BY d.departmentName");
+if (!$departments) {
+    $_SESSION['error'] = "Failed to fetch departments: " . $conn->error;
+    header("Location: adminSetup.php");
+    exit();
+}
+
+$query = "SELECT a.id, a.assignmentTitle, a.assignmentDescription, a.endDate, a.startDate, 
+                 a.allowedFileTypes, d.departmentName 
+          FROM assignments a 
+          JOIN departments d ON a.departmentId = d.id 
+          ORDER BY a.create_time DESC 
+          LIMIT 4";
+
+$assignmentsResult = $conn->query($query);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -94,6 +126,9 @@
                 <a class="nav-link" href="adminAssignment.php">
                     <i class="fas fa-book me-2"></i>Assignments
                 </a>
+                <a href="adminSubmission.php" class="nav-link">
+                    <i class="fas fa-file-upload me-2"></i>Submissions
+                </a>
                 <a class="nav-link" href="adminFeedback.php">
                     <i class="fas fa-comments me-2"></i>Feedback
                 </a>
@@ -175,9 +210,9 @@
                             <label class="form-label">Faculty</label>
                             <select class="form-select">
                                 <option value="">All Faculties</option>
-                                <option value="engineering">Engineering</option>
-                                <option value="science">Science</option>
-                                <option value="arts">Arts</option>
+                                <?php foreach ($faculties as $faculty): ?>
+                                    <option value="<?= $faculty['id'] ?>"><?= htmlspecialchars($faculty['facultyName']) ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="col-md-2">
@@ -208,176 +243,103 @@
                 </div>
             </div>
 
-            <!-- Assignments List -->
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">All Assignments</h5>
+            <?php if ($assignmentsResult->num_rows > 0): ?>
+                <div class="row">
+                    <?php while ($row = $assignmentsResult->fetch_assoc()): ?>
+                        <div class="col-md-6 mb-4">
+                            <div class="assignment-card p-3 shadow-sm rounded border bg-white">
+                                <div class="priority-badge priority-high">New</div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div class="course-code text-primary"><?= htmlspecialchars($row['departmentName']) ?></div>
+                                    <div class="status-badge status-pending">
+                                        <i class="fas fa-hourglass-half"></i> Active
+                                    </div>
+                                </div>
+                                <div class="assignment-date text-muted mb-2">
+                                    <i class="fas fa-calendar me-1"></i>
+                                    Start: <?= date('M d, Y', strtotime($row['startDate'])) ?> |
+                                    End: <?= date('M d, Y', strtotime($row['endDate'])) ?>
+                                </div>
+                                <div class="assignment-description mb-2">
+                                    <strong><?= htmlspecialchars($row['assignmentTitle']) ?>:</strong><br>
+                                    <?= nl2br(htmlspecialchars($row['assignmentDescription'])) ?>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-secondary">
+                                        <i class="fas fa-file-alt me-1"></i>
+                                        <?= htmlspecialchars($row['allowedFileTypes']) ?>
+                                    </span>
+                                    <a href="assignment-view.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-gradient">
+                                        View Details
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body p-0">
-                            <div class="assignment-item">
-                                <div class="d-flex justify-content-between align-items-start p-3 border-bottom">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1">Data Structures and Algorithms</h6>
-                                        <p class="text-muted mb-2">Computer Science - 300 Level</p>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <small class="text-muted">
-                                                <i class="fas fa-calendar me-1"></i>Due: Dec 20, 2024
-                                            </small>
-                                            <small class="text-muted">
-                                                <i class="fas fa-file me-1"></i>PDF, DOCX allowed
-                                            </small>
-                                            <small class="text-muted">
-                                                <i class="fas fa-users me-1"></i>45 submissions
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <span class="badge bg-success">Active</span>
-                                        <div class="btn-group btn-group-sm mt-2">
-                                            <button class="btn btn-outline-primary" title="View">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-warning" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger" title="Delete">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <?php endwhile; ?>
+                </div>
+            <?php else: ?>
+                <p class="text-muted">No recent assignments uploaded.</p>
+            <?php endif; ?>
 
-                            <div class="assignment-item">
-                                <div class="d-flex justify-content-between align-items-start p-3 border-bottom">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1">Web Development Project</h6>
-                                        <p class="text-muted mb-2">Computer Science - 400 Level</p>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <small class="text-warning">
-                                                <i class="fas fa-calendar me-1"></i>Due: Dec 15, 2024
-                                            </small>
-                                            <small class="text-muted">
-                                                <i class="fas fa-file me-1"></i>ZIP, PDF allowed</small>
-                                            <small class="text-muted">
-                                                <i class="fas fa-users me-1"></i>32 submissions
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <span class="badge bg-warning">Due Soon</span>
-                                        <div class="btn-group btn-group-sm mt-2">
-                                            <button class="btn btn-outline-primary" title="View">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-warning" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger" title="Delete">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="assignment-item">
-                                <div class="d-flex justify-content-between align-items-start p-3">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1">Machine Learning Basics</h6>
-                                        <p class="text-muted mb-2">Computer Science - 500 Level</p>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <small class="text-danger">
-                                                <i class="fas fa-calendar me-1"></i>Due: Dec 10, 2024
-                                            </small>
-                                            <small class="text-muted">
-                                                <i class="fas fa-file me-1"></i>PDF, TXT allowed
-                                            </small>
-                                            <small class="text-muted">
-                                                <i class="fas fa-users me-1"></i>18 submissions
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <span class="badge bg-danger">Overdue</span>
-                                        <div class="btn-group btn-group-sm mt-2">
-                                            <button class="btn btn-outline-primary" title="View">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-warning" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger" title="Delete">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Assignment Progress</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="progress-item mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Data Structures</span>
+                                <span>75%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" style="width: 75%"></div>
+                            </div>
+                        </div>
+
+                        <div class="progress-item mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Web Development</span>
+                                <span>60%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning" style="width: 60%"></div>
+                            </div>
+                        </div>
+
+                        <div class="progress-item mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Machine Learning</span>
+                                <span>40%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-danger" style="width: 40%"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">Assignment Progress</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="progress-item mb-4">
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Data Structures</span>
-                                    <span>75%</span>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar bg-success" style="width: 75%"></div>
-                                </div>
-                            </div>
-
-                            <div class="progress-item mb-4">
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Web Development</span>
-                                    <span>60%</span>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar bg-warning" style="width: 60%"></div>
-                                </div>
-                            </div>
-
-                            <div class="progress-item mb-4">
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Machine Learning</span>
-                                    <span>40%</span>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar bg-danger" style="width: 40%"></div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Quick Actions</h5>
                     </div>
-
-                    <div class="card mt-4">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">Quick Actions</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-outline-primary">
-                                    <i class="fas fa-download me-2"></i>Export All Assignments
-                                </button>
-                                <button class="btn btn-outline-success">
-                                    <i class="fas fa-bell me-2"></i>Send Reminders
-                                </button>
-                                <button class="btn btn-outline-info">
-                                    <i class="fas fa-chart-bar me-2"></i>View Analytics
-                                </button>
-                            </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-primary">
+                                <i class="fas fa-download me-2"></i>Export All Assignments
+                            </button>
+                            <button class="btn btn-outline-success">
+                                <i class="fas fa-bell me-2"></i>Send Reminders
+                            </button>
+                            <button class="btn btn-outline-info">
+                                <i class="fas fa-chart-bar me-2"></i>View Analytics
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </main>
 
@@ -389,67 +351,67 @@
                     <h5 class="modal-title">Create New Assignment</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form id="createAssignmentForm">
+                <form id="createAssignmentForm" action="../controller/adminUpload.php" method="POST" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="row g-3">
                             <div class="col-12">
                                 <label class="form-label">Assignment Title</label>
-                                <input type="text" class="form-control" required>
+                                <input type="text" class="form-control" name="assignmentTitle" required>
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Description</label>
-                                <textarea class="form-control" rows="3" required></textarea>
+                                <textarea class="form-control" rows="3" name="assignmentDescription" required></textarea>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Faculty</label>
                                 <select class="form-select" required>
                                     <option value="">Select Faculty</option>
-                                    <option value="engineering">Engineering</option>
-                                    <option value="science">Science</option>
-                                    <option value="arts">Arts</option>
+                                    <?php foreach ($faculties as $faculty): ?>
+                                        <option value="<?= $faculty['id'] ?>"><?= htmlspecialchars($faculty['facultyName']) ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Department</label>
-                                <select class="form-select" required>
+                                <select class="form-select" name="departmentId" required>
                                     <option value="">Select Department</option>
-                                    <option value="computer">Computer Science</option>
-                                    <option value="mechanical">Mechanical Engineering</option>
-                                    <option value="electrical">Electrical Engineering</option>
+                                    <?php foreach ($departments as $dept): ?>
+                                        <option value="<?= $dept['id'] ?>"><?= htmlspecialchars($dept['departmentName']) ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Start Date</label>
-                                <input type="datetime-local" class="form-control" required>
+                                <input type="datetime-local" class="form-control" name="startDate" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Due Date</label>
-                                <input type="datetime-local" class="form-control" required>
+                                <input type="datetime-local" class="form-control" name="endDate" required>
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Allowed File Types</label>
                                 <div class="form-check-group">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" value="pdf" id="pdf">
+                                        <input class="form-check-input" type="checkbox" name="allowedFileTypes[]" value="pdf" id="pdf">
                                         <label class="form-check-label" for="pdf">PDF</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" value="docx" id="docx">
+                                        <input class="form-check-input" type="checkbox" name="allowedFileTypes[]" value="docx" id="docx">
                                         <label class="form-check-label" for="docx">DOCX</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" value="txt" id="txt">
+                                        <input class="form-check-input" type="checkbox" name="allowedFileTypes[]" value="txt" id="txt">
                                         <label class="form-check-label" for="txt">TXT</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" value="ppt" id="ppt">
+                                        <input class="form-check-input" type="checkbox" name="allowedFileTypes[]" value="ppt" id="ppt">
                                         <label class="form-check-label" for="ppt">PPT</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Assignment Files (Optional)</label>
-                                <input type="file" class="form-control" multiple>
+                                <input type="file" class="form-control" name="fileUpload">
                                 <small class="text-muted">Upload reference materials or instructions</small>
                             </div>
                         </div>
