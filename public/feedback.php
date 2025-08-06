@@ -1,3 +1,13 @@
+<?php
+$categories = [
+  'teaching-style' => 'Teaching Style',
+  'course-content' => 'Course Content',
+  'assignments' => 'Assignments',
+  'communication' => 'Communication',
+  'resources' => 'Learning Resources',
+  'general' => 'General Feedback'
+];
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -156,64 +166,52 @@
               </h3>
             </div>
             <div class="p-4">
-              <form id="feedbackForm" method="post">
+              <form id="feedbackForm" method="post" action="../controller/feedbackController.php">
                 <div class="row mb-3">
                   <div class="col-md-6">
                     <label class="form-label">Student Name (Optional)</label>
                     <input
                       type="text"
                       class="form-control"
+                      name="studentName"
                       id="studentName"
                       placeholder="Your full name" />
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label">Course *</label>
+                    <label class="form-label">Department</label>
                     <input
                       type="text"
                       class="form-control"
-                      id="course"
-                      placeholder="e.g., Data Structures"
+                      name="department"
+                      id="department"
+                      placeholder="e.g., Computer Science"
                       required />
                   </div>
                 </div>
 
                 <div class="row mb-3">
                   <div class="col-md-6">
-                    <label class="form-label">Lecturer Name *</label>
+                    <label class="form-label">Mat Number</label>
                     <input
                       type="text"
                       class="form-control"
-                      id="lecturer"
-                      placeholder="Lecturer's full name"
+                      name="matricNo"
+                      id="matricNo"
+                      placeholder="Your matric number"
                       required />
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">Feedback Category *</label>
-                    <select class="form-select" id="category" required>
-                      <option value="">Select category</option>
-                      <option value="teaching-style">Teaching Style</option>
-                      <option value="course-content">Course Content</option>
-                      <option value="assignments">Assignments</option>
-                      <option value="communication">Communication</option>
-                      <option value="resources">Learning Resources</option>
-                      <option value="general">General Feedback</option>
+                    <select class="form-select" id="category" name="category" required>
+                      <option value="" selected disabled>Select category</option>
+                      <?php foreach ($categories as $value => $label): ?>
+                        <option value="<?= htmlspecialchars($value) ?>"
+                          <?= (isset($_POST['category']) && $_POST['category'] == $value) ? 'selected' : '' ?>>
+                          <?= htmlspecialchars($label) ?>
+                        </option>
+                      <?php endforeach; ?>
                     </select>
                   </div>
-                </div>
-
-                <div class="mb-3">
-                  <label class="form-label">Overall Rating *</label>
-                  <div class="d-flex align-items-center">
-                    <div id="starRating">
-                      <i class="fas fa-star star-rating" data-rating="1"></i>
-                      <i class="fas fa-star star-rating" data-rating="2"></i>
-                      <i class="fas fa-star star-rating" data-rating="3"></i>
-                      <i class="fas fa-star star-rating" data-rating="4"></i>
-                      <i class="fas fa-star star-rating" data-rating="5"></i>
-                    </div>
-                    <span class="ms-3 text-muted" id="ratingText"></span>
-                  </div>
-                  <input type="hidden" id="rating" required />
                 </div>
 
                 <div class="mb-3">
@@ -221,6 +219,8 @@
                   <textarea
                     class="form-control"
                     id="message"
+                    name="message"
+                    maxlength="500"
                     rows="6"
                     placeholder="Share your thoughts, suggestions, or concerns..."
                     required></textarea>
@@ -230,6 +230,8 @@
                   <input
                     class="form-check-input"
                     type="checkbox"
+                    name="anonymous"
+                    value="1"
                     id="anonymous" />
                   <label class="form-check-label" for="anonymous">
                     Submit anonymously
@@ -266,6 +268,15 @@
       Engineering
     </p>
   </footer>
+  <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var toast = new bootstrap.Toast(document.getElementById('successToast'));
+      toast.show();
+    });
+  </script>
+<?php endif; ?>
+
   <!-- Scripts -->
   <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
   <script src="/assets/js/index.js"></script>

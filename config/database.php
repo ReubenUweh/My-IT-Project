@@ -7,7 +7,8 @@ class DataBase
     private $database = 'classtrack';
 
     public $conn;
-    public function __construct() {
+    public function __construct()
+    {
         $this->connect();
     }
 
@@ -18,7 +19,10 @@ class DataBase
             die("Connection to database failed");
         } else {
             $this->conn = $conn;
-        }  
+        }
+    }
+    public function getConnection()
+    {
+        return $this->conn;
     }
 }
-?>

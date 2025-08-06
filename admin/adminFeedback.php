@@ -1,3 +1,15 @@
+<?php
+require_once '../config/database.php';
+
+// Create DB connection
+$database = new Database();
+$conn = $database->getConnection();
+
+// Fetch feedbacks
+$query = "SELECT * FROM feedbacks ORDER BY id DESC";
+$result = $conn->query($query);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -227,134 +239,34 @@
                             </div>
                         </div>
                         <div class="card-body p-0">
-                            <!-- Submission Item -->
-                            <div class="submission-item border-bottom p-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <h6 class="mb-0 me-3">John Doe - Data Structures Assignment</h6>
-                                            <span class="badge bg-warning">Pending Review</span>
-                                        </div>
-                                        <p class="text-muted mb-2">CS/2023/001 • Computer Science • 300 Level</p>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <small class="text-muted">
-                                                <i class="fas fa-calendar me-1"></i>Submitted: Dec 18, 2024
-                                            </small>
-                                            <small class="text-muted">
-                                                <i class="fas fa-file-pdf me-1"></i>assignment.pdf (2.3 MB)
-                                            </small>
-                                            <small class="text-success">
-                                                <i class="fas fa-clock me-1"></i>On Time
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-outline-primary" title="Preview"
-                                                data-bs-toggle="modal" data-bs-target="#previewModal">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-success" title="Provide Feedback"
-                                                data-bs-toggle="modal" data-bs-target="#feedbackModal">
-                                                <i class="fas fa-comment"></i>
-                                            </button>
-                                            <button class="btn btn-outline-info" title="Download">
-                                                <i class="fas fa-download"></i>
-                                            </button>
-                                            <button class="btn btn-outline-warning" title="Flag">
-                                                <i class="fas fa-flag"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Submission Item -->
-                            <div class="submission-item border-bottom p-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <h6 class="mb-0 me-3">Jane Smith - Web Development Project</h6>
-                                            <span class="badge bg-success">Reviewed</span>
-                                        </div>
-                                        <p class="text-muted mb-2">ME/2022/045 • Computer Science • 400 Level</p>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <small class="text-muted">
-                                                <i class="fas fa-calendar me-1"></i>Submitted: Dec 17, 2024
-                                            </small>
-                                            <small class="text-muted">
-                                                <i class="fas fa-file-archive me-1"></i>project.zip (15.2 MB)
-                                            </small>
-                                            <small class="text-warning">
-                                                <i class="fas fa-clock me-1"></i>Late (1 day)
-                                            </small>
-                                        </div>
-                                        <div class="mt-2">
-                                            <div class="d-flex align-items-center">
-                                                <span class="text-muted me-2">Score:</span>
-                                                <div class="rating">
-                                                    <i class="fas fa-star text-warning"></i>
-                                                    <i class="fas fa-star text-warning"></i>
-                                                    <i class="fas fa-star text-warning"></i>
-                                                    <i class="fas fa-star text-warning"></i>
-                                                    <i class="far fa-star text-muted"></i>
+                            <?php if ($result && $result->num_rows > 0): ?>
+                                <?php while ($row = $result->fetch_assoc()): ?>
+                                    <div class="submission-item border-bottom p-3">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <h6 class="mb-0 me-3">
+                                                        <?= $row['anonymous'] ? 'Anonymous' : htmlspecialchars($row['studentName']) ?>
+                                                        - <?= htmlspecialchars($row['category']) ?>
+                                                    </h6>
+                                                    <span class="badge bg-info">Feedback</span>
                                                 </div>
-                                                <span class="ms-2 fw-bold">85/100</span>
+                                                <p class="text-muted mb-1">
+                                                    <?= $row['anonymous'] ? '' : htmlspecialchars($row['matricNo']) ?> •
+                                                    <?= htmlspecialchars($row['department']) ?>
+                                                </p>
+                                                <p class="text-muted"><?= nl2br(htmlspecialchars($row['message'])) ?></p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="text-end">
-                                        <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-outline-primary" title="Preview">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-success" title="Edit Feedback">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-outline-info" title="Download">
-                                                <i class="fas fa-download"></i>
-                                            </button>
-                                        </div>
-                                    </div>
+                                <?php endwhile; ?>
+                            <?php else: ?>
+                                <div class="p-3">
+                                    <p class="text-muted">No feedback submitted yet.</p>
                                 </div>
-                            </div>
+                            <?php endif; ?>
 
-                            <!-- Submission Item -->
-                            <div class="submission-item p-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <h6 class="mb-0 me-3">Mike Johnson - Machine Learning Report</h6>
-                                            <span class="badge bg-danger">Flagged</span>
-                                        </div>
-                                        <p class="text-muted mb-2">EE/2021/078 • Computer Science • 500 Level</p>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <small class="text-muted">
-                                                <i class="fas fa-calendar me-1"></i>Submitted: Dec 16, 2024
-                                            </small>
-                                            <small class="text-muted">
-                                                <i class="fas fa-file-alt me-1"></i>report.docx (5.8 MB)
-                                            </small>
-                                            <small class="text-danger">
-                                                <i class="fas fa-exclamation-triangle me-1"></i>Plagiarism Alert
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-outline-primary" title="Preview">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger" title="Review Flag">
-                                                <i class="fas fa-flag"></i>
-                                            </button>
-                                            <button class="btn btn-outline-info" title="Download">
-                                                <i class="fas fa-download"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>

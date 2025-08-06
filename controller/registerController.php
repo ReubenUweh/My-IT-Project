@@ -1,7 +1,7 @@
 <?php
 session_start();
 require "../config/database.php";
-require "../models/student.php";
+require "../models/Student.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db = new DataBase();
