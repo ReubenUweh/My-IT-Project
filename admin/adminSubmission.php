@@ -1,3 +1,31 @@
+<?php
+require '../config/database.php';
+$db = new DataBase();
+$conn = $db->conn;
+
+$sql = "SELECT 
+            s.id AS submissionId,
+            st.firstName,
+            st.lastName,
+            st.matricNo,
+            d.departmentName,
+            a.assignmentTitle,
+            s.create_time,
+            s.fileName,
+            s.status
+        FROM 
+            submissions s
+        JOIN 
+            students st ON s.studentId = st.id
+        JOIN 
+            departments d ON st.departmentId = d.id
+        JOIN 
+            assignments a ON s.assignmentId = a.id
+        ORDER BY 
+            s.create_time DESC";
+
+$result = mysqli_query($conn, $sql);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -176,157 +204,69 @@
                         <thead>
                             <tr>
                                 <th><input type="checkbox" id="selectAllSubmissions"></th>
-                                <th>Student</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Mat No</th>
+                                <th>Department</th>
                                 <th>Assignment</th>
                                 <th>Submitted</th>
                                 <th>File</th>
-                                <th>Status</th>
                                 <th>Score</th>
-                                <th>Plagiarism</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><input type="checkbox" class="submission-checkbox"></td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img src="https://via.placeholder.com/32x32" class="rounded-circle me-2"
-                                            alt="Avatar">
-                                        <div>
-                                            <div class="fw-bold">John Doe</div>
-                                            <small class="text-muted">CS/2023/001</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>Data Structures Project</td>
-                                <td>
-                                    <div>Mar 10, 2024</div>
-                                    <small class="text-muted">2:30 PM</small>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-file-pdf text-danger me-2"></i>
-                                        <span>project_report.pdf</span>
-                                    </div>
-                                    <small class="text-muted">2.4 MB</small>
-                                </td>
-                                <td><span class="badge bg-warning">Grading</span></td>
-                                <td>
-                                    <div class="input-group input-group-sm" style="width: 80px;">
-                                        <input type="number" class="form-control" value="85" max="100" min="0">
-                                        <span class="input-group-text">/100</span>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-success">Clear</span></td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-outline-primary" title="View/Annotate"
-                                            data-bs-toggle="modal" data-bs-target="#viewSubmissionModal">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-outline-success" title="Download">
-                                            <i class="fas fa-download"></i>
-                                        </button>
-                                        <button class="btn btn-outline-info" title="Feedback"
-                                            onclick="window.location.href='feedback.html'">
-                                            <i class="fas fa-comment"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" class="submission-checkbox"></td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img src="https://via.placeholder.com/32x32" class="rounded-circle me-2"
-                                            alt="Avatar">
-                                        <div>
-                                            <div class="fw-bold">Jane Smith</div>
-                                            <small class="text-muted">ENG/2023/045</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>Circuit Design Lab</td>
-                                <td>
-                                    <div>Mar 12, 2024</div>
-                                    <small class="text-muted">4:15 PM</small>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-file-word text-primary me-2"></i>
-                                        <span>circuit_analysis.docx</span>
-                                    </div>
-                                    <small class="text-muted">1.8 MB</small>
-                                </td>
-                                <td><span class="badge bg-success">Graded</span></td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <span class="fw-bold text-success">92/100</span>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-danger">Flagged</span></td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-outline-primary" title="View/Annotate">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-outline-success" title="Download">
-                                            <i class="fas fa-download"></i>
-                                        </button>
-                                        <button class="btn btn-outline-info" title="Feedback">
-                                            <i class="fas fa-comment"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" class="submission-checkbox"></td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img src="https://via.placeholder.com/32x32" class="rounded-circle me-2"
-                                            alt="Avatar">
-                                        <div>
-                                            <div class="fw-bold">Mike Johnson</div>
-                                            <small class="text-muted">SCI/2023/078</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>Calculus Problem Set</td>
-                                <td>
-                                    <div>Mar 11, 2024</div>
-                                    <small class="text-muted">11:45 AM</small>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-file-pdf text-danger me-2"></i>
-                                        <span>calculus_solutions.pdf</span>
-                                    </div>
-                                    <small class="text-muted">3.1 MB</small>
-                                </td>
-                                <td><span class="badge bg-info">Submitted</span></td>
-                                <td>
-                                    <div class="input-group input-group-sm" style="width: 80px;">
-                                        <input type="number" class="form-control" placeholder="0" max="100"
-                                            min="0">
-                                        <span class="input-group-text">/100</span>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-secondary">Pending</span></td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-outline-primary" title="View/Annotate">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-outline-success" title="Download">
-                                            <i class="fas fa-download"></i>
-                                        </button>
-                                        <button class="btn btn-outline-info" title="Feedback">
-                                            <i class="fas fa-comment"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                            <?php if (mysqli_num_rows($result) > 0): ?>
+                                <?php while ($row = mysqli_fetch_assoc($result)):
+                                    $dateTime = new DateTime($row['create_time']); ?>
+                                    <tr>
+                                        <td><input type="checkbox" class="submission-checkbox" value="<?= $row['submissionId'] ?>"></td>
+                                        <td><?= htmlspecialchars($row['firstName']) ?></td>
+                                        <td><?= htmlspecialchars($row['lastName']) ?></td>
+                                        <td><?= htmlspecialchars($row['matricNo']) ?></td>
+                                        <td><?= htmlspecialchars($row['departmentName']) ?></td>
+                                        <td><?= htmlspecialchars($row['assignmentTitle']) ?></td>
+                                        <td>
+                                            <div><?= $dateTime->format('M d, Y') ?></div>
+                                            <small class="text-muted"><?= $dateTime->format('h:i A') ?></small>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-file-alt text-primary me-2"></i>
+                                                <span><?= htmlspecialchars($row['fileName']) ?></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-sm" style="width: 80px;">
+                                                <input type="number" class="form-control" value="0" max="100" min="0">
+                                                <span class="input-group-text">/100</span>
+                                            </div>
+                                        </td>
+                                        <td> <span class="badge bg-<?= $row['status'] === 'submitted' ? 'success' : ($submission['status'] === 'pending' ? 'inavlid' : 'danger') ?>">
+                                                <?= ucfirst($row['status']) ?>
+                                            </span></td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="viewSubmission.php?id=<?= $row['submissionId'] ?>" class="btn btn-outline-primary" title="View">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="download.php?id=<?= $row['submissionId'] ?>" class="btn btn-outline-success" title="Download">
+                                                    <i class="fas fa-download"></i>
+                                                </a>
+                                                <a href="adminFeedback.php?submissionId=<?= $row['submissionId'] ?>" class="btn btn-outline-info" title="Feedback">
+                                                    <i class="fas fa-comment"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan='10' class='text-center'>No submissions found</td>
+                                </tr>
+                            <?php endif; ?>
+
                         </tbody>
                     </table>
                 </div>
