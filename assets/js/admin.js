@@ -87,7 +87,7 @@ function handleSearch(event) {
                 row.style.display = 'none';
             }
         }
-    });
+    }); 
 }
 
 // Handle form submission
