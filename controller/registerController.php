@@ -28,8 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (Exception $e) {
         $_SESSION['error'] = "Error:" . $e->getMessage();
     }
-    header("Location: /public/login.php");
+    header("Location: ../public/login.php");
     exit();
 } else {
-    header("Location: /public/register.php");
+    header("Location: ../public/register.php");
 }

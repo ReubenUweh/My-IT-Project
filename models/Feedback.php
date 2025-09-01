@@ -10,7 +10,7 @@ class Feedback
 
     public function submitFeedback($data)
     {
-        $query = "INSERT INTO feedbacks (studentName, matricNo, department, category, message, anonymous) 
+        $query = "INSERT INTO feedbacks (studentName, matricNo, department, category, message, anonymous,) 
                   VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
 

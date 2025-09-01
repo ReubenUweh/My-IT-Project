@@ -250,8 +250,8 @@
         </div>
     </main>
 
-    <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
-    <script src="/assets/js/admin.js"></script>
+    <script src="../assets/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="../assets/js/admin.js"></script>
 </body>
 
 </html>

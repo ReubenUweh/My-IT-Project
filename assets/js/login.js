@@ -21,7 +21,7 @@ document
     // Validate matric number format
     const matricPattern = /^[A-Z]{3}\d{7}$/;
     if (!matricPattern.test(data.matricNo)) {
-      alert("Please enter a valid matric number format (e.g., CMPP2023001)");
+      alert("Please enter a valid matric number format (e.g., CMP2023001)");
       return;
     }
 

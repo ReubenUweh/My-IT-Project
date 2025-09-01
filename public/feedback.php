@@ -1,4 +1,7 @@
 <?php
+require_once '../config/database.php';
+session_start();
+
 $categories = [
   'teaching-style' => 'Teaching Style',
   'course-content' => 'Course Content',
@@ -7,7 +10,39 @@ $categories = [
   'resources' => 'Learning Resources',
   'general' => 'General Feedback'
 ];
+
+$db = new Database();
+$conn = $db->getConnection();
+
+// Get student details from session
+$studentId = $_SESSION['studentId'] ?? 0;
+
+// Total feedbacks for this student
+$totalQuery = $conn->prepare("
+    SELECT COUNT(*) as total 
+    FROM feedbacks 
+    WHERE matricNo = (
+        SELECT matricNo FROM students WHERE id = ?
+    )
+");
+$totalQuery->bind_param("i", $studentId);
+$totalQuery->execute();
+$totalFeedbacks = $totalQuery->get_result()->fetch_assoc()['total'] ?? 0;
+
+// Feedbacks this week for this student
+$weekQuery = $conn->prepare("
+    SELECT COUNT(*) as weeklyTotal
+    FROM feedbacks
+    WHERE matricNo = (
+        SELECT matricNo FROM students WHERE id = ?
+    )
+    AND YEARWEEK(createTime, 1) = YEARWEEK(CURDATE(), 1)
+");
+$weekQuery->bind_param("i", $studentId);
+$weekQuery->execute();
+$weeklyFeedbacks = $weekQuery->get_result()->fetch_assoc()['weeklyTotal'] ?? 0;
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,9 +50,9 @@ $categories = [
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ClassTrack Feedback Portal</title>
-  <link rel="stylesheet" href="/assets/css/index.css" />
-  <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/index.css" />
+  <link href="../assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
 </head>
 
 <body>
@@ -60,7 +95,7 @@ $categories = [
           </ul>
         </div>
       </div>
-      <a href="/controller/logout.php" class="login-button me-2">Logout</a>
+      <a href="../controller/logout.php" class="login-button me-2">Logout</a>
       <button
         class="navbar-toggler border-0"
         type="button"
@@ -99,13 +134,13 @@ $categories = [
   <div class="container">
     <!-- Stats Cards -->
     <div class="row mb-4">
-      <div class="col-md-4 mb-3">
+      <div class="col-md-6 mb-3">
         <div class="card stat-card h-100">
           <div
             class="card-body d-flex justify-content-between align-items-center">
             <div>
               <h6 class="text-muted">Total Feedbacks</h6>
-              <h2 class="text-primary fw-bold mb-0" id="totalFeedbacks">3</h2>
+              <h2 class="text-primary fw-bold mb-0" id="totalFeedbacks"><?php echo $totalFeedbacks; ?></h2>
             </div>
             <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
               <i class="fas fa-comments text-primary fa-2x"></i>
@@ -113,28 +148,14 @@ $categories = [
           </div>
         </div>
       </div>
-      <div class="col-md-4 mb-3">
-        <div class="card stat-card h-100">
-          <div
-            class="card-body d-flex justify-content-between align-items-center">
-            <div>
-              <h6 class="text-muted">Average Rating</h6>
-              <h2 class="text-success fw-bold mb-0" id="avgRating">4.7</h2>
-            </div>
-            <div class="bg-success bg-opacity-10 p-3 rounded-circle">
-              <i class="fas fa-chart-line text-success fa-2x"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 mb-3">
+      <div class="col-md-6 mb-3">
         <div class="card stat-card h-100">
           <div
             class="card-body d-flex justify-content-between align-items-center">
             <div>
               <h6 class="text-muted">This Week</h6>
               <h2 class="text-warning fw-bold mb-0" id="weeklyFeedbacks">
-                2
+                <?php echo $weeklyFeedbacks; ?>
               </h2>
             </div>
             <div class="bg-warning bg-opacity-10 p-3 rounded-circle">
@@ -269,17 +290,17 @@ $categories = [
     </p>
   </footer>
   <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      var toast = new bootstrap.Toast(document.getElementById('successToast'));
-      toast.show();
-    });
-  </script>
-<?php endif; ?>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        var toast = new bootstrap.Toast(document.getElementById('successToast'));
+        toast.show();
+      });
+    </script>
+  <?php endif; ?>
 
   <!-- Scripts -->
-  <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
-  <script src="/assets/js/index.js"></script>
+  <script src="../assets/bootstrap/js/bootstrap.bundle.js"></script>
+  <script src="../assets/js/index.js"></script>
 </body>
 
 </html>

@@ -7,25 +7,30 @@ $studentId = $_SESSION['studentId'];
 $db = new DataBase();
 $conn = $db->conn;
 
-// Getting the student's department ID
+// Get student's department
 $deptSql = "SELECT departmentId FROM students WHERE id = ?";
 $deptStmt = $conn->prepare($deptSql);
 $deptStmt->bind_param("i", $studentId);
 $deptStmt->execute();
 $deptResult = $deptStmt->get_result();
 
-if ($deptResult->num_rows > 0) {
-  $student = $deptResult->fetch_assoc();
-  $departmentId = $student['departmentId'];
-} else {
+if ($deptResult->num_rows === 0) {
   die("Student not found.");
 }
-// Fetch assignments for that department
-$assignmentSql = "SELECT * FROM assignments WHERE departmentId = ? ORDER BY endDate DESC LIMIT 5";
-$assignmentStmt = $conn->prepare($assignmentSql);
-$assignmentStmt->bind_param("i", $departmentId);
-$assignmentStmt->execute();
-$assignmentsResult = $assignmentStmt->get_result();
+
+$departmentId = $deptResult->fetch_assoc()['departmentId'];
+
+// Fetch assignments for this student
+// This assumes you have a `submissions` table that stores student submissions
+$sql = "SELECT a.id, a.startDate, a.endDate,
+           (SELECT COUNT(*) FROM submissions s WHERE s.assignmentId = a.id AND s.studentId = ?) AS submitted
+    FROM assignments a
+    WHERE a.departmentId = ?
+";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ii", $studentId, $departmentId);
+$stmt->execute();
+$result = $stmt->get_result();
 
 $totalAssignments = 0;
 $pendingCount = 0;
@@ -33,22 +38,27 @@ $completedCount = 0;
 $overdueCount = 0;
 $today = date('Y-m-d');
 
-$assignmentStmt->execute();
-$allAssignmentsResult = $assignmentStmt->get_result();
-
-while ($row = $allAssignmentsResult->fetch_assoc()) {
+while ($row = $result->fetch_assoc()) {
   $totalAssignments++;
+  $submitted = $row['submitted'] > 0;
 
-  if ($today > $row['endDate']) {
+  if ($today > $row['endDate'] && !$submitted) {
     $overdueCount++;
-  } elseif ($today >= $row['startDate'] && $today <= $row['endDate']) {
+  } elseif (!$submitted && $today >= $row['startDate'] && $today <= $row['endDate']) {
     $pendingCount++;
-  } else {
-    $completedCount++; // I will make adjusting here in the future process incase logic changes
+  } elseif ($submitted) {
+    $completedCount++;
   }
 }
 
+// Fetch latest 5 assignments for display
+$assignmentSql = "SELECT * FROM assignments WHERE departmentId = ? ORDER BY endDate DESC LIMIT 5";
+$assignmentStmt = $conn->prepare($assignmentSql);
+$assignmentStmt->bind_param("i", $departmentId);
+$assignmentStmt->execute();
+$assignmentsResult = $assignmentStmt->get_result();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -56,9 +66,9 @@ while ($row = $allAssignmentsResult->fetch_assoc()) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ClassTrack | My Assignments</title>
-  <link rel="stylesheet" href="/assets/css/index.css" />
-  <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/index.css" />
+  <link href="../assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
 </head>
 
 <body>
@@ -101,7 +111,7 @@ while ($row = $allAssignmentsResult->fetch_assoc()) {
           </ul>
         </div>
       </div>
-      <a href="/controller/logout.php" class="login-button me-2">Logout</a>
+      <a href="../controller/logout.php" class="login-button me-2">Logout</a>
       <button
         class="navbar-toggler border-0"
         type="button"
@@ -225,7 +235,7 @@ while ($row = $allAssignmentsResult->fetch_assoc()) {
   </footer>
 
   <!-- Scripts -->
-  <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
+  <script src="../assets/bootstrap/js/bootstrap.bundle.js"></script>
 </body>
 
 </html>

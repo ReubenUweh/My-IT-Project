@@ -17,9 +17,9 @@ $result = $conn->query($query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Dashboard</title>
-    <link rel="stylesheet" href="/assets/css/admin.css">
-    <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link href="../assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
 </head>
 
 <body>
@@ -406,9 +406,9 @@ $result = $conn->query($query);
         </div>
     </div>
 
-    <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
-    <script src="/assets/js/admin.js"></script>
-    <script src="/assets/js/feedback.js"></script>
+    <script src="../assets/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="../assets/js/admin.js"></script>
+    <script src="../assets/js/feedback.js"></script>
 </body>
 
 </html>

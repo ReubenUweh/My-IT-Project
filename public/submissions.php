@@ -5,22 +5,22 @@ require '../config/database.php';
 $db = new DataBase();
 $conn = $db->conn;
 
-// Replace this with actual student/admin ID if needed
-$studentId = $_SESSION['studentId'] ?? null;
+$studentId = $_SESSION['studentId'] ?? 0;
 
+// Get submissions list
 $sql = "SELECT 
-            submissions.id AS submissionId,
-            submissions.create_time AS submissionTime,
-            submissions.title AS submissionTitle,
-            submissions.fileName,
-            submissions.status,
-            assignments.assignmentTitle,
-            assignments.assignmentDescription,
-            assignments.endDate
-        FROM submissions
-        INNER JOIN assignments ON submissions.assignmentId = assignments.id
-        WHERE submissions.studentId = ?
-        ORDER BY submissions.create_time DESC";
+            s.id AS submissionId,
+            s.create_time AS submissionTime,
+            s.title AS submissionTitle,
+            s.fileName,
+            s.status,
+            a.assignmentTitle,
+            a.assignmentDescription,
+            a.endDate
+        FROM submissions s
+        INNER JOIN assignments a ON s.assignmentId = a.id
+        WHERE s.studentId = ?
+        ORDER BY s.create_time DESC";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $studentId);
@@ -29,36 +29,26 @@ $result = $stmt->get_result();
 
 $submissions = [];
 while ($row = $result->fetch_assoc()) {
-  $submissions[] = $row;
+    $submissions[] = $row;
 }
 
-// Total Submissions
-$totalQuery = "SELECT COUNT(*) AS total FROM submissions";
-$total = $conn->query($totalQuery)->fetch_assoc()['total'];
+// Total submissions for this student
+$totalStmt = $conn->prepare("SELECT COUNT(*) AS total FROM submissions WHERE studentId = ?");
+$totalStmt->bind_param("i", $studentId);
+$totalStmt->execute();
+$total = $totalStmt->get_result()->fetch_assoc()['total'] ?? 0;
 
-
-// Late Submissions: those submitted after assignment endDate
-$lateQuery = "
-SELECT COUNT(*) AS late 
-FROM submissions s
-JOIN assignments a ON s.assignmentId = a.id
-WHERE s.create_time > a.endDate
-";
-$late = $conn->query($lateQuery)->fetch_assoc()['late'];
-
-// Total Submissions
-$totalQuery = "SELECT COUNT(*) AS total FROM submissions";
-$total = $conn->query($totalQuery)->fetch_assoc()['total'];
-
-// Late Submissions: those submitted after assignment endDate
-$lateQuery = "
-SELECT COUNT(*) AS late 
-FROM submissions s
-JOIN assignments a ON s.assignmentId = a.id
-WHERE s.create_time > a.endDate
-";
-$late = $conn->query($lateQuery)->fetch_assoc()['late'];
-
+// Late submissions for this student
+$lateStmt = $conn->prepare("
+    SELECT COUNT(*) AS late
+    FROM submissions s
+    JOIN assignments a ON s.assignmentId = a.id
+    WHERE s.studentId = ?
+    AND s.create_time > a.endDate
+");
+$lateStmt->bind_param("i", $studentId);
+$lateStmt->execute();
+$late = $lateStmt->get_result()->fetch_assoc()['late'] ?? 0;
 ?>
 
 <!DOCTYPE html>
@@ -68,9 +58,9 @@ $late = $conn->query($lateQuery)->fetch_assoc()['late'];
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ClassTrack | My Submissions</title>
-  <link rel="stylesheet" href="/assets/css/index.css" />
-  <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/index.css" />
+  <link href="../assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
 </head>
 
 <body>
@@ -113,7 +103,7 @@ $late = $conn->query($lateQuery)->fetch_assoc()['late'];
           </ul>
         </div>
       </div>
-      <a href="/controller/logout.php" class="login-button me-2">Logout</a>
+      <a href="../controller/logout.php" class="login-button me-2">Logout</a>
       <button
         class="navbar-toggler border-0"
         type="button"
@@ -202,7 +192,7 @@ $late = $conn->query($lateQuery)->fetch_assoc()['late'];
 
 
   <!-- Scripts -->
-  <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
+  <script src="../assets/bootstrap/js/bootstrap.bundle.js"></script>
 </body>
 
 </html>

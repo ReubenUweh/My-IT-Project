@@ -3,7 +3,7 @@ session_start();
 require "../config/database.php";
 
 if (!isset($_SESSION['studentId'])) {
-  header("Location: /public/login.php");
+  header("Location: ./login.php");
   exit();
 }
 
@@ -22,6 +22,47 @@ $stmt->bind_param("i", $studentId);
 $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
+
+// 1. Feedback submitted by this student
+$feedbackQuery = $conn->prepare("
+    SELECT COUNT(*) AS totalFeedback 
+    FROM feedbacks 
+    WHERE matricNo = (
+        SELECT matricNo FROM students WHERE id = ?
+    )
+");
+$feedbackQuery->bind_param("i", $studentId);
+$feedbackQuery->execute();
+$feedbackResult = $feedbackQuery->get_result()->fetch_assoc();
+$feedbackSubmitted = (int)($feedbackResult['totalFeedback'] ?? 0);
+
+// 2. Assignments submitted by this student
+$submittedQuery = $conn->prepare("
+    SELECT COUNT(*) AS totalSubmitted 
+    FROM submissions 
+    WHERE status = 'submitted' 
+    AND studentId = ?
+");
+$submittedQuery->bind_param("i", $studentId);
+$submittedQuery->execute();
+$submittedResult = $submittedQuery->get_result()->fetch_assoc();
+$assignmentsSubmitted = (int)($submittedResult['totalSubmitted'] ?? 0);
+
+// 3. Pending assignments for this student
+$pendingQuery = $conn->prepare("
+    SELECT COUNT(*) AS totalPending 
+    FROM submissions 
+    WHERE status = 'pending' 
+    AND studentId = ?
+");
+$pendingQuery->bind_param("i", $studentId);
+$pendingQuery->execute();
+$pendingResult = $pendingQuery->get_result()->fetch_assoc();
+$pendingAssignments = (int)($pendingResult['totalPending'] ?? 0);
+
+//alert assignments
+$sql = "SELECT assignmentTitle, endDate FROM assignments ORDER BY create_time DESC LIMIT 1";
+$result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,9 +71,9 @@ $user = $result->fetch_assoc();
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ClassTrack</title>
-  <link rel="stylesheet" href="/assets/css/index.css" />
-  <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/index.css" />
+  <link href="../assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
 </head>
 
 <body>
@@ -75,7 +116,7 @@ $user = $result->fetch_assoc();
           </ul>
         </div>
       </div>
-      <a href="/controller/logout.php" class="login-button me-2">Logout</a>
+      <a href="../controller/logout.php" class="login-button me-2">Logout</a>
       <button
         class="navbar-toggler border-0"
         type="button"
@@ -90,11 +131,20 @@ $user = $result->fetch_assoc();
 
   <!-- Hero Section -->
   <div class="container-fluid px-4">
-    <div class="alert alert-info shadow-sm">
-      <strong><i class="fas fa-bell me-2"></i>New Assignment:</strong>
-      <b>Data Structures</b> due on
-      <span class="text-danger fw-bold">May 30</span>
-    </div>
+    <?php if ($result && $result->num_rows > 0): ?>
+      <?php
+      $row = $result->fetch_assoc();
+      echo '<div class="alert alert-info shadow-sm">
+            <strong><i class="fas fa-bell me-2"></i>New Assignment:</strong>
+            <b>' . htmlspecialchars($row['assignmentTitle']) . '</b> due on
+            <span class="text-danger fw-bold">' . date('M d', strtotime($row['endDate'])) . '</span>
+        </div>';
+      ?>
+    <?php else: ?>
+      <div class="alert alert-warning">
+        <strong>No New Assignments</strong>
+      </div>
+    <?php endif; ?>
 
     <div class="container">
       <!-- User Profile Section -->
@@ -102,7 +152,7 @@ $user = $result->fetch_assoc();
         <div class="row align-items-center">
           <div class="col-auto">
             <img
-              src="/assets/images/profile.png"
+              src="../assets/images/profile.png"
               alt="Profile"
               class="profile-image"
               width="145"
@@ -125,7 +175,7 @@ $user = $result->fetch_assoc();
           <div class="card stat-card h-100">
             <div
               class="card-body text-center d-flex flex-column justify-content-center">
-              <h1 class="card-title mb-3">12</h1>
+              <h1 class="card-title mb-3"><?php echo $assignmentsSubmitted; ?></h1>
               <p class="card-text fw-bold mb-0">
                 Assignment Submitted
                 <i class="fas fa-file-alt ms-2 text-primary"></i>
@@ -137,7 +187,7 @@ $user = $result->fetch_assoc();
           <div class="card stat-card h-100">
             <div
               class="card-body text-center d-flex flex-column justify-content-center">
-              <h1 class="card-title mb-3">3</h1>
+              <h1 class="card-title mb-3"><?php echo $pendingAssignments; ?></h1>
               <p class="card-text fw-bold mb-0">
                 Pending Assignments
                 <i class="far fa-hourglass ms-2 text-warning"></i>
@@ -149,9 +199,9 @@ $user = $result->fetch_assoc();
           <div class="card stat-card h-100">
             <div
               class="card-body text-center d-flex flex-column justify-content-center">
-              <h1 class="card-title mb-3">5</h1>
+              <h1 class="card-title mb-3"><?php echo $feedbackSubmitted; ?></h1>
               <p class="card-text fw-bold mb-0">
-                Feedbacks Gotten
+                Feedbacks Submitted
                 <i class="fas fa-receipt ms-2 text-success"></i>
               </p>
             </div>
@@ -347,19 +397,19 @@ $user = $result->fetch_assoc();
         <div class="carousel-inner">
           <div class="carousel-item active">
             <img
-              src="/assets/images/Uni-space.jpg"
+              src="../assets/images/Uni-space.jpg"
               class="d-block w-100"
               alt="University Campus" />
           </div>
           <div class="carousel-item">
             <img
-              src="/assets/images/classroom-student.jpg"
+              src="../assets/images/classroom-student.jpg"
               class="d-block w-100"
               alt="Classroom" />
           </div>
           <div class="carousel-item">
             <img
-              src="/assets/images/grad.jpg"
+              src="../assets/images/grad.jpg"
               class="d-block w-100"
               alt="Graduation" />
           </div>
@@ -423,7 +473,7 @@ $user = $result->fetch_assoc();
     </p>
   </footer>
   <!-- Scripts -->
-  <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
+  <script src="../assets/bootstrap/js/bootstrap.bundle.js"></script>
 </body>
 
 </html>

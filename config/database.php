@@ -1,10 +1,10 @@
 <?php
 class DataBase
 {
-    private $host = 'localhost';
-    private $username = 'root';
-    private $password = '';
-    private $database = 'classtrack';
+    private $host = 'mysql-reuben-uweh.alwaysdata.net';
+    private $username = '406264';
+    private $password = 'Rairai206';
+    private $database = 'reuben-uweh_classtrack';
 
     public $conn;
     public function __construct()

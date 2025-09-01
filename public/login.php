@@ -10,49 +10,24 @@ session_start();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Login - ClassTrack</title>
-    <link rel="stylesheet" href="/assets/css/login.css" />
-    <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/login.css" />
+    <link href="../assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
 </head>
 
 <body>
     <!-- NavBar -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand me-auto" href="index.html">ClassTrack</a>
+            <a class="navbar-brand me-auto" href="./login.php">ClassTrack</a>
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
                 aria-labelledby="offcanvasNavbarLabel">
                 <div class="offcanvas-header">
                     <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
                         ClassTrack
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.html">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link mx-lg-2" href="upload.html">Uploads</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link mx-lg-2" href="assignments.html">Assignments</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link mx-lg-2" href="submissions.html">Submissions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link mx-lg-2" href="feedback.html">Feedbacks</a>
-                        </li>
-                    </ul>
                 </div>
             </div>
-            <a href="register.html" class="register-button me-2">Register</a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
         </div>
     </nav>
 
@@ -63,7 +38,7 @@ session_start();
                 <!-- Image Section -->
                 <div class="col-lg-6 mb-4 slide-in-left">
                     <div class="image-section">
-                        <img src="/assets/images/Education-rafiki.svg" alt="Student Login"
+                        <img src="../assets/images/Education-rafiki.svg" alt="Student Login"
                             class="login-image d-none d-md-block" />
                         <div class="image-content">
                             <h2>Welcome Back</h2>
@@ -88,7 +63,7 @@ session_start();
                                 <div class="alert alert-danger"><?php echo $_SESSION['error'];
                                                                 unset($_SESSION['error']); ?></div>
                             <?php endif; ?>
-                            <form method="post" action="/controller/loginController.php" id="loginForm">
+                            <form method="post" action="../controller/loginController.php" id="loginForm">
                                 <div class="form-group">
                                     <label for="lastName" class="form-label">
                                         <i class="fas fa-id-card"></i>Last Name
@@ -152,8 +127,8 @@ session_start();
     </footer>
 
     <!-- Scripts -->
-    <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
-    <script src="/assets/js/login.js"></script>
+    <script src="../assets/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="../assets/js/login.js"></script>
 </body>
 
 </html>

@@ -3,7 +3,6 @@ session_start();
 require_once "../config/database.php";
 require_once "../models/Student.php";
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db = new DataBase();
     $conn = $db->conn;
@@ -23,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = $student->login($lastName, $matricNo);
         if ($result) {
             $_SESSION['studentId'] = $result['id'];
-            header("Location: /public/index.php");
+            header("Location: ../public/index.php");
             exit();
         } else {
             $_SESSION['error'] = "Login failed: Invalid last name or matric number.";
@@ -31,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (Exception $e) {
         $_SESSION['error'] = "Error:" . $e->getMessage();
     }
-    header("Location: /public/login.php");
+    header("Location: ../public/login.php");
     exit();
-    header("Location: /public/login.php");
+    header("Location: ../public/login.php");
 }
